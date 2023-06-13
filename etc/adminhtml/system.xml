@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="payfurl" translate="label" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <attribute type="expanded">1</attribute>
+                <attribute type="displayIn">recommended_solutions</attribute>
+                <fieldset_css>adyen-payments complex</fieldset_css>
+                <label>PayFURL Payment</label>
+                <field id="active" translate="label comment" sortOrder="1" type="select" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="env" translate="label comment" sortOrder="10" type="select" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Environment</label>
+                    <source_model>Payfurl\Payment\Model\Config::getEnvironments</source_model>
+                </field>
+                <field id="title" translate="label comment" sortOrder="20" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Title</label>
+                </field>
+                <field id="sandbox_public_key" translate="label comment" sortOrder="30" type="obscure" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Sandbox Public key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="env">sandbox</field>
+                    </depends>
+                </field>
+                <field id="sandbox_secret_key" translate="label comment" sortOrder="40" type="obscure" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Sandbox Secret key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="env">sandbox</field>
+                    </depends>
+                </field>
+                <field id="public_key" translate="label comment" sortOrder="30" type="obscure" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Public key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="env">prod</field>
+                    </depends>
+                </field>
+                <field id="secret_key" translate="label comment" sortOrder="40" type="obscure" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Secret key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="env">prod</field>
+                    </depends>
+                </field>
+                <field id="debug" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Debug</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>payment/payfurl/debug</config_path>
+                </field>
+                <field id="key_validation" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label></label>
+                    <comment><![CDATA[After making any changes to Public Key or Secret key, please Save Config first before validating credentials.]]></comment>
+                    <frontend_model>Payfurl\Payment\Block\Adminhtml\Validation</frontend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

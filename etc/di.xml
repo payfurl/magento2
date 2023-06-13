@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="PayfurlFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="string">payfurl</argument>
+            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Payfurl\Payment\Block\OrderTransactionInfo</argument>
+            <argument name="valueHandlerPool" xsi:type="object">PayfurlValueHandlerPool</argument>
+            <argument name="validatorPool" xsi:type="object">PayfurlValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">PayfurlCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <!-- Virtual type for PayfurlValueHandlerPool  -->
+    <virtualType name="PayfurlValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">PayfurlConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="PayfurlConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">Payfurl\Payment\Gateway\Config\Config</argument>
+        </arguments>
+    </virtualType>
+    <!-- End virtual type for PayfurlValueHandlerPool  -->
+
+    <virtualType name="PayfurlValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="basic" xsi:type="string">Payfurl\Payment\Gateway\Validator\BasicValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="PayfurlCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="capture" xsi:type="string">PayfurlCaptureCommand</item>
+                <item name="refund" xsi:type="string">PayfurlRefundCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="PayfurlCaptureCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">PayfurlCaptureRequest</argument>
+            <argument name="transferFactory" xsi:type="object">Payfurl\Payment\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">Payfurl\Payment\Gateway\Http\Client\TransactionCapture</argument>
+            <argument name="handler" xsi:type="object">PaufurlCaptureHandler</argument>
+            <argument name="validator" xsi:type="object">Payfurl\Payment\Gateway\Validator\GeneralResponseValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">Payfurl\Payment\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="PayfurlCaptureRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="customer" xsi:type="string">Payfurl\Payment\Gateway\Request\CustomerDataBuilder</item>
+                <item name="payment" xsi:type="string">Payfurl\Payment\Gateway\Request\PaymentDataBuilder</item>
+                <item name="address" xsi:type="string">Payfurl\Payment\Gateway\Request\AddressDataBuilder</item>
+                <item name="order" xsi:type="string">Payfurl\Payment\Gateway\Request\OrderDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="PaufurlCaptureHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="payment_details" xsi:type="string">Payfurl\Payment\Gateway\Response\PaymentDataHandler</item>
+                <item name="txn_id" xsi:type="string">Payfurl\Payment\Gateway\Response\TransactionDataHandler</item>
+                <item name="additional_data" xsi:type="string">Payfurl\Payment\Gateway\Response\AdditionalDataHandler</item>
+                <item name="payfurl_customer_id" xsi:type="string">Payfurl\Payment\Gateway\Response\CustomerDataHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="PayfurlRefundCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">PayfurlRefundRequest</argument>
+            <argument name="transferFactory" xsi:type="object">Payfurl\Payment\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">Payfurl\Payment\Gateway\Http\Client\TransactionRefund</argument>
+            <argument name="handler" xsi:type="object">PaufurlRefundHandler</argument>
+            <argument name="validator" xsi:type="object">Payfurl\Payment\Gateway\Validator\GeneralResponseValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">Payfurl\Payment\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="PayfurlRefundRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="refundData" xsi:type="string">Payfurl\Payment\Gateway\Request\RefundDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="PaufurlRefundHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="refund_transaction_details" xsi:type="string">Payfurl\Payment\Gateway\Response\RefundHandler</item>
+                <item name="refund_additional_data" xsi:type="string">RefundAdditionalDataHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="RefundAdditionalDataHandler" type="Payfurl\Payment\Gateway\Response\AdditionalDataHandler">
+        <arguments>
+            <argument name="transactionType" xsi:type="string">refund</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Payfurl\Payment\Gateway\Http\Client\TransactionCapture">
+        <arguments>
+            <argument name="customLogger" xsi:type="object">PayfurlLogger</argument>
+        </arguments>
+    </type>
+    <type name="Payfurl\Payment\Gateway\Http\Client\TransactionRefund">
+        <arguments>
+            <argument name="customLogger" xsi:type="object">PayfurlLogger</argument>
+        </arguments>
+    </type>
+
+    <!-- Logger, initialized with PayfurlConfig -->
+    <virtualType name="PayfurlLogger" type="Magento\Payment\Model\Method\Logger">
+        <arguments>
+            <argument name="config" xsi:type="object">Payfurl\Payment\Model\Config</argument>
+            <argument name="logger" xsi:type="object">PayfurlVirtualLogger</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Payfurl\Payment\Model\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Payfurl\Payment\Model\Ui\ConfigProvider::CODE</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="PayfurlVirtualDebug" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/payfurl.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PayfurlVirtualLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="debug" xsi:type="object">PayfurlVirtualDebug</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!--End virtual type for logger-->
+
+    <!-- Virtual type for errorMessageMapper  -->
+    <virtualType name="Payfurl\Payment\Gateway\ErrorMapper\VirtualErrorMessageMapper" type="Magento\Payment\Gateway\ErrorMapper\ErrorMessageMapper">
+        <arguments>
+            <argument name="messageMapping" xsi:type="object">Payfurl\Payment\Gateway\ErrorMapper\VirtualMappingData</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Payfurl\Payment\Gateway\ErrorMapper\VirtualMappingData" type="Magento\Payment\Gateway\ErrorMapper\MappingData">
+        <arguments>
+            <argument name="reader" xsi:type="object">Payfurl\Payment\Gateway\ErrorMapper\VirtualConfigReader</argument>
+            <argument name="cacheId" xsi:type="string">payfurl_error_mapper</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Payfurl\Payment\Gateway\ErrorMapper\VirtualConfigReader" type="Magento\Payment\Gateway\ErrorMapper\VirtualConfigReader">
+        <arguments>
+            <!-- etc/payfurl_error_mapping.xml  -->
+            <argument name="fileName" xsi:type="string">payfurl_error_mapping.xml</argument>
+        </arguments>
+    </virtualType>
+    <!-- End virtual type for errorMessageMapper  -->
+
+    <preference for="Magento\Payment\Gateway\Data\Order\OrderAdapter" type="Payfurl\Payment\Gateway\Data\OrderAdapter"/>
+</config>

@@ -1,0 +1,10 @@
+#payment_us_payfurl-head {
+    background: url(../images/payfurl-logo.png) no-repeat scroll 0 50% / 18rem auto;
+    background-position-x: left;
+    padding-left: 20rem;
+    font-weight: bold;
+}
+#payment_us_payfurl-head:before {
+    left: auto;
+    right: 1.3rem;
+}

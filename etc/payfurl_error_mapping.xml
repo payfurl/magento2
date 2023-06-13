@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Payment:etc/error_mapping.xsd">
+    <message_list>
+        <message code="1" translate="true">Unknown Error</message>
+        <message code="2" translate="true">Invalid Amount</message>
+        <message code="3" translate="true">Invalid Authorise Details</message>
+        <message code="4" translate="true">Invalid Capture Details</message>
+        <message code="5" translate="true">Invalid Card Number</message>
+        <message code="6" translate="true">Invalid CCV</message>
+        <message code="7" translate="true">Invalid Country</message>
+        <message code="8" translate="true">Invalid Country for transfer</message>
+        <message code="9" translate="true">Invalid Expiry Date</message>
+        <message code="10" translate="true">Invalid Payment Details</message>
+        <message code="11" translate="true">Invalid Paypal Account</message>
+        <message code="12" translate="true">Invalid Refund Details</message>
+        <message code="13" translate="true">Invalid Void Details</message>
+        <message code="14" translate="true">Expired Card</message>
+        <message code="15" translate="true">Insufficient Funds</message>
+        <message code="16" translate="true">Location not supported</message>
+        <message code="17" translate="true">Paypal Billing agreement cancelled</message>
+        <message code="18" translate="true">3D Secure failed</message>
+        <message code="19" translate="true">Account Email Unconfirmed</message>
+        <message code="20" translate="true">Account Error</message>
+        <message code="21" translate="true">Account is locked or closed</message>
+        <message code="22" translate="true">Account not Authorised</message>
+        <message code="23" translate="true">Account Restricted</message>
+        <message code="24" translate="true">Amount exceeds MaxAmount for payTo agreement</message>
+        <message code="25" translate="true">Amount too Large</message>
+        <message code="26" translate="true">Authentication/Authorization Error</message>
+        <message code="27" translate="true">Billing Postal Code not supported</message>
+        <message code="28" translate="true">Currency Compliance issues with transactions</message>
+        <message code="29" translate="true">Currency not supported</message>
+        <message code="30" translate="true">Duplicate</message>
+        <message code="31" translate="true">Duplicate Transaction</message>
+        <message code="32" translate="true">Feature Unavailable</message>
+        <message code="33" translate="true">PayTo Agreement is not active</message>
+        <message code="34" translate="true">Provider Service Error</message>
+        <message code="35" translate="true">Rate Limiting Applied</message>
+        <message code="36" translate="true">Receiver Account Locked</message>
+        <message code="37" translate="true">Retry later</message>
+        <message code="38" translate="true">Sender Account Issue</message>
+        <message code="39" translate="true">Invalid ProviderId</message>
+        <message code="40" translate="true">Invalid Authentication</message>
+        <message code="41" translate="true">Invalid Environment</message>
+        <message code="42" translate="true">Tokenise Card Error</message>
+        <message code="43" translate="true">Transaction Error</message>
+        <message code="44" translate="true">Not support charge</message>
+        <message code="45" translate="true">Unable to refund</message>
+        <message code="46" translate="true">Unable to charge</message>
+        <message code="47" translate="true">Unable to capture</message>
+        <message code="48" translate="true">Unable to void</message>
+        <message code="49" translate="true">Unable to add customer</message>
+        <message code="50" translate="true">No transaction found</message>
+        <message code="51" translate="true">Invalid or expired token</message>
+        <message code="52" translate="true">Invalid CustomerId</message>
+        <message code="53" translate="true">Invalid Charge</message>
+        <message code="54" translate="true">Invalid Charge Status</message>
+        <message code="55" translate="true">Invalid Card length</message>
+        <message code="56" translate="true">Invalid PaymentMethodId</message>
+        <message code="57" translate="true">Invalid PaymentMethod</message>
+        <message code="58" translate="true">Invalid Payment Type</message>
+        <message code="59" translate="true">Invalid threeDSServerTransID</message>
+        <message code="60" translate="true">Invalid Transfer Amount</message>
+        <message code="61" translate="true">Invalid ReferenceId</message>
+        <message code="62" translate="true">Invalid VaultId</message>
+        <message code="63" translate="true">No card providers configured</message>
+        <message code="64" translate="true">Customer has no DefaultPaymentMethodId</message>
+        <message code="65" translate="true">No provider found</message>
+        <message code="66" translate="true">No VaultId associated with this payment method</message>
+        <message code="67" translate="true">No transfer information provided</message>
+        <message code="68" translate="true">Transfer larger than original charge</message>
+        <message code="69" translate="true">Duplicate Group reference</message>
+        <message code="70" translate="true">Duplicate transfer reference</message>
+        <message code="71" translate="true">Feature Authorise and Capture is not supported by this provider</message>
+        <message code="72" translate="true">Invalid CustomerId (removed)</message>
+        <message code="73" translate="true">Invalid PaymentMethodId (removed)</message>
+        <message code="74" translate="true">Invalid Amount. Amount must be positive</message>
+        <message code="75" translate="true">Feature Verify Pending is not supported by this provider</message>
+        <message code="76" translate="true">Invalid Amount. Maximum available refund is less</message>
+        <message code="77" translate="true">Invalid capture amount passed. Capture amount could not be more than a transaction one</message>
+        <message code="78" translate="true">Feature Partial Capture is not supported by this provider. Capture amount must be the same as a transaction one</message>
+        <message code="79" translate="true">Amount outside range for merchant</message>
+        <message code="80" translate="true">Gateway timeout</message>
+        <message code="81" translate="true">Invalid PaymentInformation</message>
+        <message code="82" translate="true">Cannot provide both ExpireDate and ExpireSeconds</message>
+        <message code="83" translate="true">Invalid ExpireDate or ExpireSeconds</message>
+        <message code="84" translate="true">Invalid ChargeId</message>
+        <message code="85" translate="true">Cannot provide both VaultExpireDate and VaultExpireSeconds</message>
+        <message code="86" translate="true">Invalid Vault Expiry Data</message>
+        <message code="87" translate="true">Invalid TokenId</message>
+        <message code="88" translate="true">Invalid TransferId</message>
+        <message code="89" translate="true">Invalid Notification Format</message>
+        <message code="90" translate="true">Validation Error</message>
+        <message code="91" translate="true">Token verification not supported</message>
+        <message code="92" translate="true">Invalid address</message>
+    </message_list>
+</mapping>

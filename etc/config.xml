@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <payfurl>
+                <payment_action>authorize_capture</payment_action><!-- You can use another methor like capture  -->
+                <model>PayfurlFacade</model>
+                <can_use_checkout>1</can_use_checkout>
+                <can_capture>1</can_capture>
+                <can_refund>1</can_refund>
+                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_get_saved_payments>1</can_get_saved_payments>
+                <active>1</active>
+                <title>Payment</title>
+                <order_status>pending_payment</order_status><!-- set default order status-->
+                <env>sandbox</env>
+                <sandbox_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <sandbox_secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+            </payfurl>
+        </payment>
+    </default>
+</config>

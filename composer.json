@@ -1,0 +1,27 @@
+{
+    "name": "payfurl/module-payment",
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "PayFURL",
+            "email": "support@payfurl.com"
+        }
+    ],
+    "require": {
+        "magento/framework": "*",
+        "payfurl/phpsdk": "v1.6"
+    },
+    "suggest": {
+        "php": "~7.4.0||~8.1.0"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Payfurl\\Payment\\": ""
+        }
+    }
+}
