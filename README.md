@@ -58,7 +58,7 @@ In this guide, we are working with Magento 2.4.6. Install the required Composer 
 Start the Composer installation. 
 
 ```commandline
-composer require payfurl/magento2
+composer require payfurl/module-payment
 ```
 
 The extension requires a Marketplace account.

@@ -1,4 +1,4 @@
-Copyright © 2023-2024 PayFURL.
+Copyright © 2023-present PayFURL.
 
 PayFURL reserves all rights in the Program as delivered. The Program
 or any portion thereof may not be reproduced in any form whatsoever without
