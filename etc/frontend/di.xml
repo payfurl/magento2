@@ -7,11 +7,11 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Checkout\Block\Onepage">
-        <arguments>
-            <argument name="layoutProcessors" xsi:type="array">
-                <item name="payfurlLayoutProcessor" xsi:type="object">Payfurl\Payment\Block\Checkout\PayfurlLayoutProcessor</item>
-            </argument>
-        </arguments>
-    </type>
+<!--    <type name="Magento\Checkout\Block\Onepage">-->
+<!--        <arguments>-->
+<!--            <argument name="layoutProcessors" xsi:type="array">-->
+<!--                <item name="payfurlLayoutProcessor" xsi:type="object">Payfurl\Payment\Block\Checkout\PayfurlLayoutProcessor</item>-->
+<!--            </argument>-->
+<!--        </arguments>-->
+<!--    </type>-->
 </config>
