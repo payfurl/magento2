@@ -21,6 +21,7 @@ define(
         this._super();
 
         let self = this;
+        window.quote = quote;
 
         /*change amount after quote change*/
         quote.totals.subscribe(function (newValue) {
