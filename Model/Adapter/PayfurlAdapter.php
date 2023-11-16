@@ -97,6 +97,9 @@ class PayfurlAdapter
     {
         $svc = new PayFurlSDK\Charge();
         try {
+            if ($data['Phone'] && substr($data['Phone'], 0, 1) == '0') {
+                $data['Phone'] = '+61' . substr($data['Phone'], 1);
+            }
             return $svc->CreateWithPaymentMethod($data);
         } catch (PayFurlSDK\ResponseException $exception) {
             return [
@@ -142,6 +145,10 @@ class PayfurlAdapter
     protected function chargeForNewPayFurlCustomer($data)
     {
         $chargeSdk = new PayFurlSDK\Charge();
+
+        if ($data['Phone'] && substr($data['Phone'], 0, 1) == '0') {
+            $data['Phone'] = '+61' . substr($data['Phone'], 1);
+        }
 
         if ($data['payfurlSaveMyPayment']) {
             $customerSdk = new PayFurlSDK\Customer();

@@ -55,10 +55,8 @@
             </div>
         </div>
         <!-- /ko -->
-        <!-- ko ifnot: getSavedPaymentMethods() -->
-        <p>No saved payment methods</p>
-        <!-- /ko -->
 
+        <!-- ko if: getSavedPaymentMethods() -->
         <div class="payment-method-title">
             <input type="radio"
                    id="payment_payfurl_radio_new_card"
@@ -71,6 +69,8 @@
                 <span>Pay a new payment method</span>
             </label>
         </div>
+        <!-- /ko -->
+
         <form class="form"  action="/" method="post" data-bind="visible: checkCard() == 'new'">
             <div id="payfurl-checkout-form" data-bind="afterRender: initPaymentForm()"></div>
             <div class="checkout-agreements-block">

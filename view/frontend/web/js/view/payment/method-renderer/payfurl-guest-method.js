@@ -10,6 +10,7 @@ define(
 
         return Component.extend({
             totals: quote.totals,
+            customerEmail: quote.guestEmail,
             defaults: {
                 template: 'Payfurl_Payment/payment/payfurl-guest'
             },
@@ -17,6 +18,7 @@ define(
                 this._super();
 
                 let self = this;
+                window.quote = quote;
 
                 /*change amount after quote change*/
                 quote.totals.subscribe(function (newValue) {
@@ -50,13 +52,49 @@ define(
             },
             initPaymentForm: function () {
                 let quoteTotal = quote.getTotals()();
-                let orderTotal = this.getSegment("grand_total").value;
-                payfurl.init(this.getEnv(), this.getPublicKey())
+                let orderTotal = this.getSegment('grand_total').value;
+                const billingAddress = quote.billingAddress();
+                const items = quote.getItems();
+                let phone = billingAddress.telephone.replace(/^0/, '+61');
+                if (!phone.match(/^\+/)) {
+                    phone = '+61' + phone;
+                }
+                payfurl.init(this.getEnv(), this.getPublicKey(), true)
+                      .setOrderInfo({
+                          orderItems: items.map(p => ({
+                              name: p.name,
+                              quantity: p.qty,
+                              sku: p.sku,
+                              unitPrice: p.price,
+                              totalAmount: p.price * p.qty,
+                          })),
+                          taxAmount: quoteTotal.tax_amount,
+                          shippingAmount: quoteTotal.shipping_amount,
+                          discountAmount: quoteTotal.discount_amount,
+                      })
+                      .setBillingAddress({
+                          firstName: billingAddress.firstname,
+                          lastName: billingAddress.lastname,
+                          email: this.customerEmail,
+                          phoneNumber: phone,
+                          streetAddress: billingAddress.street[0],
+                          city: billingAddress.city,
+                          country: billingAddress.countryId,
+                          region: billingAddress.region,
+                          postalCode: billingAddress.postcode,
+                          state: billingAddress.regionCode,
+                      })
+                      .setCustomerInfo({
+                          firstName: billingAddress.firstname,
+                          lastName: billingAddress.lastname,
+                          email: this.customerEmail,
+                          phoneNumber: phone,
+                      })
                     .addDropIn(
                         'payfurl-checkout-form',
                         orderTotal,
                         quoteTotal['quote_currency_code'],
-                        {threeDSEmail: quote.guestEmail}
+                        {threeDSEmail: this.customerEmail}
                     );
 
                 return this;

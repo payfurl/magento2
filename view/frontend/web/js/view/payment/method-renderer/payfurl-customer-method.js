@@ -21,6 +21,7 @@ define(
         this._super();
 
         let self = this;
+        window.quote = quote;
 
         /*change amount after quote change*/
         quote.totals.subscribe(function (newValue) {
@@ -52,7 +53,25 @@ define(
           self.isPlaceOrderActionAllowed(false);
         });
 
+        window.addEventListener("message", self.messageHandler);
+
         return this;
+      },
+      messageHandler: function(event) {
+        if (!event?.data?.status) return;
+
+        if (event?.data?.status === 'checkout') {
+          const saveCheckbox = $('#save_my_payment_method');
+          saveCheckbox.hide();
+          saveCheckbox.next().hide();
+          return;
+        }
+
+        if (event.data.status === "activate" && event.data.component === "card") {
+          const saveCheckbox = $('#save_my_payment_method');
+          saveCheckbox.show();
+          saveCheckbox.next().show();
+        }
       },
       initPaymentForm: function () {
         let quoteTotal = quote.getTotals()();
@@ -101,17 +120,6 @@ define(
             quoteTotal['quote_currency_code'],
             { threeDSEmail: this.getCustomerEmail() },
           );
-
-        // handle hide/show checkbox when click PayPal
-        let saveCheckbox = $('#save_my_payment_method');
-        $(document).on('click', '#combined-tab1', function (e) {
-          saveCheckbox.hide();
-          saveCheckbox.next().hide();
-        });
-        $(document).on('click', '#combined-tab0', function (e) {
-          saveCheckbox.show();
-          saveCheckbox.next().show();
-        });
 
         return this;
       },
