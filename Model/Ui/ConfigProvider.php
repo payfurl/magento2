@@ -55,7 +55,7 @@ class ConfigProvider implements ConfigProviderInterface
 
     protected function getCurrentPublicKey()
     {
-        if ($this->config->getEnv() == 'prod') {
+        if ($this->config->getEnv() == 'production') {
             return $this->config->getLivePublicKey();
         } else {
             return $this->config->getSandboxPublicKey();
