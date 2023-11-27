@@ -36,14 +36,14 @@
                     <label>Public key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <depends>
-                        <field id="env">prod</field>
+                        <field id="env">production</field>
                     </depends>
                 </field>
                 <field id="secret_key" translate="label comment" sortOrder="40" type="obscure" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Secret key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <depends>
-                        <field id="env">prod</field>
+                        <field id="env">production</field>
                     </depends>
                 </field>
                 <field id="debug" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">

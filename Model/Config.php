@@ -12,13 +12,13 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     const ENV_SANDBOX = 'sandbox';
 
-    const ENV_LIVE = 'prod';
+    const ENV_LIVE = 'production';
     const SANDBOX_PUBLIC_KEY = 'sandbox_public_key';
 
     const SANDBOX_SECRET_KEY = 'sandbox_secret_key';
     const LIVE_PUBLIC_KEY = 'public_key';
 
-    const LIVE_SECRET_KEY = 'live_secret_key';
+    const LIVE_SECRET_KEY = 'secret_key';
 
     const TITLE = 'title';
 
