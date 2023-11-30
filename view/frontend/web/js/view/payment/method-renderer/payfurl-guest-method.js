@@ -48,7 +48,39 @@ define(
                     self.isPlaceOrderActionAllowed(false);
                 });
 
+                window.addEventListener("message", self.messageHandler);
+
                 return this;
+            },
+            messageHandler: function(event) {
+                if (!event?.data?.status) return;
+
+                if (event?.data?.status === 'checkout') {
+                    const saveCheckbox = $('#save_my_payment_method');
+                    if (saveCheckbox) {
+                        saveCheckbox.hide();
+                        saveCheckbox.next().hide();
+                    }
+
+                    const checkoutButton = $('button[data-role="review-save"]');
+                    if (checkoutButton) {
+                        checkoutButton.hide();
+                    }
+                    return;
+                }
+
+                if (event.data.status === "activate" && event.data.component === "card") {
+                    const saveCheckbox = $('#save_my_payment_method');
+                    if (saveCheckbox) {
+                        saveCheckbox.show();
+                        saveCheckbox.next().show();
+                    }
+
+                    const checkoutButton = $('button[data-role="review-save"]');
+                    if (checkoutButton) {
+                        checkoutButton.show();
+                    }
+                }
             },
             initPaymentForm: function () {
                 let quoteTotal = quote.getTotals()();
