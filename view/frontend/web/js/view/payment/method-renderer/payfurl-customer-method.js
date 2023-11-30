@@ -62,15 +62,29 @@ define(
 
         if (event?.data?.status === 'checkout') {
           const saveCheckbox = $('#save_my_payment_method');
-          saveCheckbox.hide();
-          saveCheckbox.next().hide();
+          if (saveCheckbox) {
+            saveCheckbox.hide();
+            saveCheckbox.next().hide();
+          }
+
+          const checkoutButton = $('button[data-role="review-save"]');
+          if (checkoutButton) {
+            checkoutButton.hide();
+          }
           return;
         }
 
         if (event.data.status === "activate" && event.data.component === "card") {
           const saveCheckbox = $('#save_my_payment_method');
-          saveCheckbox.show();
-          saveCheckbox.next().show();
+          if (saveCheckbox) {
+            saveCheckbox.show();
+            saveCheckbox.next().show();
+          }
+
+          const checkoutButton = $('button[data-role="review-save"]');
+          if (checkoutButton) {
+            checkoutButton.show();
+          }
         }
       },
       initPaymentForm: function () {
