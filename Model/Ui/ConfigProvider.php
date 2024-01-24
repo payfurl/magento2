@@ -39,13 +39,15 @@ class ConfigProvider implements ConfigProviderInterface
         if ($this->config->isActive() && $this->getCurrentPublicKey()) {
             return [
                 'payment' => [
-                    Payfurl::METHOD_CODE => [
+                    'payfurl' => [
                         'enabled' => $this->config->isActive(),
+                        'debug' => $this->config->isDebug(),
                         'env' => $this->config->getEnv(),
                         'publicKey' => $this->getCurrentPublicKey(),
                         'title' => $this->config->getTitle(),
                         'getSavedPayments' => $this->getSavedPayments(),
-                        'payfurlSaveMyPayment' => false
+                        'payfurlSaveMyPayment' => false,
+                        'providersInfo' => $this->getProvidersInfo(),
                     ]
                 ]
             ];
@@ -103,5 +105,16 @@ class ConfigProvider implements ConfigProviderInterface
                 $customer->getCustomAttribute('payfurl_payment_id')->getValue() : '';
         }
         return '';
+    }
+
+    protected function getProvidersInfo()
+    {
+        $quote = $this->checkoutSession->getQuote();
+        $currency = $quote->getQuoteCurrencyCode();
+        $total = $quote->getGrandTotal();
+        return $this->payfurlAdapter->getProvidersInfo([
+            'currency' => $currency,
+            'amount' => $total,
+        ]);
     }
 }

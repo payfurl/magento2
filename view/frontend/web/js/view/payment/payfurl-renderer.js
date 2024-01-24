@@ -1,32 +1,53 @@
 define(
-    [
-        'uiComponent',
-        'Magento_Checkout/js/model/payment/renderer-list'
-    ],
-    function (
-        Component,
-        rendererList
-    ) {
-        'use strict';
+  [
+    'uiComponent',
+    'Magento_Checkout/js/model/payment/renderer-list',
+  ],
+  function (
+    Component,
+    rendererList,
+  ) {
+    'use strict';
 
-        if (window.checkoutConfig.isCustomerLoggedIn) {
-            rendererList.push(
-                {
-                    type: 'payfurl',
-                    component: 'Payfurl_Payment/js/view/payment/method-renderer/payfurl-customer-method'
-                }
-            );
-            return Component.extend({});
-        }
-
-        rendererList.push(
-            {
-                type: 'payfurl',
-                component: 'Payfurl_Payment/js/view/payment/method-renderer/payfurl-guest-method'
-            },
-            // other payment method renderers if required
-        );
-        /** Add view logic here if needed */
-        return Component.extend({});
+    window._checkoutConfig = window.checkoutConfig.payment;
+    const providersInfo = window.checkoutConfig.payment?.payfurl?.providersInfo;
+    if (!providersInfo) {
+      return Component.extend({});
     }
+
+    if (providersInfo.hasCardProviders) {
+      rendererList.push(
+        {
+          type: 'payfurl_card',
+          component: 'Payfurl_Payment/js/view/payment/method-renderer/payfurl-card-method',
+        },
+      );
+    }
+
+    if (providersInfo.hasPaypalProviders) {
+      rendererList.push(
+        {
+          type: 'payfurl_paypal',
+          component: 'Payfurl_Payment/js/view/payment/method-renderer/payfurl-paypal-method',
+        },
+      );
+    }
+
+    if (providersInfo.hasBnplProviders) {
+      for (const provider of providersInfo.bnplProviders) {
+        rendererList.push(
+          {
+            type: `payfurl_checkout_${provider.providerType}`,
+            component: 'Payfurl_Payment/js/view/payment/method-renderer/payfurl-checkout-method',
+            config: {
+              provider: provider,
+            }
+          },
+        );
+      }
+    }
+
+    /** Add view logic here if needed */
+    return Component.extend({});
+  },
 );
