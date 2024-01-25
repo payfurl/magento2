@@ -4,7 +4,7 @@ define(
     'jquery',
     'Magento_Checkout/js/view/payment/default',
     'Magento_Checkout/js/model/quote',
-    'payfurljs',
+    'Payfurl_Payment/js/model/payfurl',
     'Payfurl_Payment/js/model/payfurl-configuration',
   ],
   function (ko, $, Component, quote, payfurl, payfurlConfig) {

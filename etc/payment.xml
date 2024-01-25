@@ -8,10 +8,19 @@
         <method name="payfurl_paypal">
             <allow_multiple_address>1</allow_multiple_address>
         </method>
-        <method name="payfurl_checkout_azupay">
+        <method name="payfurl_checkout_payid">
+            <allow_multiple_address>1</allow_multiple_address>
+        </method>
+        <method name="payfurl_payto">
             <allow_multiple_address>1</allow_multiple_address>
         </method>
         <method name="payfurl_checkout_shift">
+            <allow_multiple_address>1</allow_multiple_address>
+        </method>
+        <method name="payfurl_checkout_pay_by_account">
+            <allow_multiple_address>1</allow_multiple_address>
+        </method>
+        <method name="payfurl_checkout_upi">
             <allow_multiple_address>1</allow_multiple_address>
         </method>
     </methods>

@@ -5,7 +5,7 @@
            class="radio"
            data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()" />
     <label data-bind="attr: {'for': getCode()}" class="label">
-      <img class="payment-icon" width="50" data-bind="attr: {'src': require.toUrl('Payfurl_Payment/images/' + getProviderLogo() + '.svg') , 'alt': getTitle()}"/>
+      <img class="payment-icon" width="50" data-bind="attr: {'src': require.toUrl('Payfurl_Payment/images/payto.svg') , 'alt': getTitle()}"/>
       <span data-bind="text: getTitle()"></span>
     </label>
   </div>
@@ -20,7 +20,7 @@
     </div>
 
     <form class="form"  action="/" method="post">
-      <div data-bind="attr: {'id': getFormId()}, afterRender: initPaymentCheckoutForm()"></div>
+      <div id="payfurl-paypal-form" data-bind="afterRender: initPaymentPayToForm()"></div>
       <div class="checkout-agreements-block">
         <!-- ko foreach: $parent.getRegion('before-place-order') -->
         <!-- ko template: getTemplate() --><!-- /ko -->

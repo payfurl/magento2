@@ -14,26 +14,18 @@ define(
     return PayfurlBaseMethod.extend({
       self: this,
       defaults: {
-        template: 'Payfurl_Payment/payment/payfurl-checkout-form',
+        template: 'Payfurl_Payment/payment/payfurl-payto-form',
       },
-      getCode: function() {
-        return `payfurl_checkout_${this.getProviderType()}`;
+      getCode: function () {
+        return 'payfurl_payto_method';
       },
-      getTitle: function() {
-        const info = payfurlConfig.getCheckoutInfo(this.getProviderType());
-        return info?.name || 'Checkout';
+      getTitle: function () {
+        return 'PayTo';
       },
-      getProviderType: function() {
-        return this.provider?.providerType;
+      getFormId: function () {
+        return 'payfurl-payto-form';
       },
-      getProviderLogo: function() {
-        if (this.getProviderType() === "azupay") return "payid";
-        return this.getProviderType();
-      },
-      getFormId: function() {
-        return `payfurl-checkout-form-${this.getProviderType()}`;
-      },
-      initPaymentCheckoutForm: function () {
+      initPaymentPayToForm: function () {
         let quoteTotal = quote.getTotals()();
         let orderTotal = this.getSegment('grand_total').value;
         const billingAddress = quote.billingAddress();
@@ -76,21 +68,16 @@ define(
           })
           .setBillingAddress(address)
           .setCustomerInfo(customer)
-          .addBnpl(
+          .addPayTo(
             this.getFormId(),
             orderTotal,
             quoteTotal['quote_currency_code'],
-            this.getProviderType(),
-            this.provider?.providerId,
+            payfurlConfig.getProvidersInfo()?.payToProviders?.[0],
             {
-              taxAmount: quoteTotal.tax_amount,
-              shippingAmount: quoteTotal.shipping_amount,
-              discountAmount: quoteTotal.discount_amount,
-              orderItems,
-              customer,
-              billingAddress: address,
+              maximumAmount: 500,
+              description: "PayTo",
             },
-            this.provider?.options
+            this.provider?.options,
           );
 
         return this;

@@ -71,7 +71,7 @@ define(
             buttonTitle: "Pay with PesaPal",
             icon: "Pesapal"
           };
-          case "PAYBYACCOUNT": return {
+          case "PAY_BY_ACCOUNT": return {
             name: "Pay By Account",
             description: "",
             buttonTitle: "Pay with Pay By Account",

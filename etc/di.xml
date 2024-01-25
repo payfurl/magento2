@@ -20,12 +20,22 @@
             <argument name="commandPool" xsi:type="object">PayfurlCommandPool</argument>
         </arguments>
     </virtualType>
-    <virtualType name="PayfurlCheckoutAzupayFacade" type="Magento\Payment\Model\Method\Adapter">
+    <virtualType name="PayfurlCheckoutPayIdFacade" type="Magento\Payment\Model\Method\Adapter">
         <arguments>
-            <argument name="code" xsi:type="string">payfurl_checkout_azupay</argument>
+            <argument name="code" xsi:type="string">payfurl_checkout_payid</argument>
             <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
             <argument name="infoBlockType" xsi:type="string">Payfurl\Payment\Block\OrderTransactionInfo</argument>
-            <argument name="valueHandlerPool" xsi:type="object">PayfurlPaymentCheckoutAzupayValueHandlerPool</argument>
+            <argument name="valueHandlerPool" xsi:type="object">PayfurlPaymentCheckoutPayIdValueHandlerPool</argument>
+            <argument name="validatorPool" xsi:type="object">PayfurlValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">PayfurlCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PayfurlCheckoutPayToFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="string">payfurl_payto</argument>
+            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Payfurl\Payment\Block\OrderTransactionInfo</argument>
+            <argument name="valueHandlerPool" xsi:type="object">PayfurlPaymentCheckoutPayToValueHandlerPool</argument>
             <argument name="validatorPool" xsi:type="object">PayfurlValidatorPool</argument>
             <argument name="commandPool" xsi:type="object">PayfurlCommandPool</argument>
         </arguments>
@@ -36,6 +46,26 @@
             <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
             <argument name="infoBlockType" xsi:type="string">Payfurl\Payment\Block\OrderTransactionInfo</argument>
             <argument name="valueHandlerPool" xsi:type="object">PayfurlPaymentCheckoutShiftValueHandlerPool</argument>
+            <argument name="validatorPool" xsi:type="object">PayfurlValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">PayfurlCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PayfurlCheckoutPayByAccountFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="string">payfurl_checkout_pay_by_account</argument>
+            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Payfurl\Payment\Block\OrderTransactionInfo</argument>
+            <argument name="valueHandlerPool" xsi:type="object">PayfurlPaymentCheckoutPayByAccountValueHandlerPool</argument>
+            <argument name="validatorPool" xsi:type="object">PayfurlValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">PayfurlCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PayfurlCheckoutUpiFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="string">payfurl_checkout_upi</argument>
+            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Payfurl\Payment\Block\OrderTransactionInfo</argument>
+            <argument name="valueHandlerPool" xsi:type="object">PayfurlPaymentCheckoutUpiValueHandlerPool</argument>
             <argument name="validatorPool" xsi:type="object">PayfurlValidatorPool</argument>
             <argument name="commandPool" xsi:type="object">PayfurlCommandPool</argument>
         </arguments>
@@ -78,21 +108,39 @@
         </arguments>
     </virtualType>
 
-    <virtualType name="PayfurlPaymentCheckoutAzupayValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+    <virtualType name="PayfurlPaymentCheckoutPayIdValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="default" xsi:type="string">PayfurlPaymentCheckoutAzupayConfigValueHandler</item>
+                <item name="default" xsi:type="string">PayfurlPaymentCheckoutPayIdConfigValueHandler</item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="PayfurlPaymentCheckoutAzupayConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+    <virtualType name="PayfurlPaymentCheckoutPayIdConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
         <arguments>
-            <argument name="configInterface" xsi:type="object">PayfurlPaymentCheckoutAzupayConfig</argument>
+            <argument name="configInterface" xsi:type="object">PayfurlPaymentCheckoutPayIdConfig</argument>
         </arguments>
     </virtualType>
-    <virtualType name="PayfurlPaymentCheckoutAzupayConfig" type="Magento\Payment\Gateway\Config\Config">
+    <virtualType name="PayfurlPaymentCheckoutPayIdConfig" type="Magento\Payment\Gateway\Config\Config">
         <arguments>
-            <argument name="methodCode" xsi:type="string">payfurl_checkout_azupay</argument>
+            <argument name="methodCode" xsi:type="string">payfurl_checkout_payid</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="PayfurlPaymentCheckoutPayToValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">PayfurlPaymentCheckoutPayToConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PayfurlPaymentCheckoutPayToConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">PayfurlPaymentCheckoutPayToConfig</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PayfurlPaymentCheckoutPayToConfig" type="Magento\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="string">payfurl_payto</argument>
         </arguments>
     </virtualType>
 
@@ -111,6 +159,42 @@
     <virtualType name="PayfurlPaymentCheckoutShiftConfig" type="Magento\Payment\Gateway\Config\Config">
         <arguments>
             <argument name="methodCode" xsi:type="string">payfurl_checkout_shift</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="PayfurlPaymentCheckoutPayByAccountValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">PayfurlPaymentCheckoutPayByAccountConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PayfurlPaymentCheckoutPayByAccountConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">PayfurlPaymentCheckoutPayByAccountConfig</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PayfurlPaymentCheckoutPayByAccountConfig" type="Magento\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="string">payfurl_checkout_pay_by_account</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="PayfurlPaymentCheckoutUpiValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">PayfurlPaymentCheckoutUpiConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PayfurlPaymentCheckoutUpiConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">PayfurlPaymentCheckoutUpiConfig</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PayfurlPaymentCheckoutUpiConfig" type="Magento\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="string">payfurl_checkout_upi</argument>
         </arguments>
     </virtualType>
 

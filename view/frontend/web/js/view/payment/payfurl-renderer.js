@@ -35,9 +35,13 @@ define(
 
     if (providersInfo.hasBnplProviders) {
       for (const provider of providersInfo.bnplProviders) {
+        let type = provider.providerType;
+        if (type === "azupay") {
+          type = "payid";
+        }
         rendererList.push(
           {
-            type: `payfurl_checkout_${provider.providerType}`,
+            type: `payfurl_checkout_${type}`,
             component: 'Payfurl_Payment/js/view/payment/method-renderer/payfurl-checkout-method',
             config: {
               provider: provider,
@@ -45,6 +49,15 @@ define(
           },
         );
       }
+    }
+
+    if (providersInfo.hasPayToProviders) {
+      rendererList.push(
+        {
+          type: 'payfurl_payto',
+          component: 'Payfurl_Payment/js/view/payment/method-renderer/payfurl-payto-method',
+        },
+      );
     }
 
     /** Add view logic here if needed */

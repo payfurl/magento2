@@ -4,7 +4,7 @@ define(
     'jquery',
     'Payfurl_Payment/js/view/payment/method-renderer/payfurl-base-method',
     'Magento_Checkout/js/model/quote',
-    'payfurljs',
+    'Payfurl_Payment/js/model/payfurl',
     'Payfurl_Payment/js/model/payfurl-configuration',
   ],
   function (ko, $, PayfurlBaseMethod, quote, payfurl, payfurlConfig) {
@@ -30,7 +30,6 @@ define(
           phone = '+61' + phone;
         }
         payfurl
-          .init(payfurlConfig.getEnv(), payfurlConfig.getPublicKey(), payfurlConfig.isDebug())
           .setOrderInfo({
             orderItems: items.map(p => ({
               name: p.name,
