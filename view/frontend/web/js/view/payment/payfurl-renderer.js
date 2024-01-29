@@ -33,6 +33,15 @@ define(
       );
     }
 
+    if (providersInfo.hasGooglePayProviders) {
+      rendererList.push(
+        {
+          type: 'payfurl_googlepay',
+          component: 'Payfurl_Payment/js/view/payment/method-renderer/payfurl-googlepay-method',
+        },
+      );
+    }
+
     if (providersInfo.hasBnplProviders) {
       for (const provider of providersInfo.bnplProviders) {
         let type = provider.providerType;

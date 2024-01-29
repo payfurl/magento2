@@ -37,6 +37,23 @@
                 <public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
             </payfurl_paypal>
+            <payfurl_googlepay>
+                <payment_action>authorize_capture</payment_action><!-- You can use another methor like capture  -->
+                <model>PayfurlGooglePayFacade</model>
+                <can_use_checkout>1</can_use_checkout>
+                <can_capture>1</can_capture>
+                <can_refund>1</can_refund>
+                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_get_saved_payments>1</can_get_saved_payments>
+                <active>1</active>
+                <title>Paypal</title>
+                <order_status>pending_payment</order_status><!-- set default order status-->
+                <env>sandbox</env>
+                <sandbox_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <sandbox_secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+            </payfurl_googlepay>
             <payfurl_checkout_payid>
                 <payment_action>authorize_capture</payment_action><!-- You can use another methor like capture  -->
                 <model>PayfurlCheckoutPayIdFacade</model>

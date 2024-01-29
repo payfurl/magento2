@@ -20,51 +20,15 @@ define(
       getTitle: function() {
         return 'Paypal';
       },
+      getFormId: function () {
+        return 'payfurl-paypal-form';
+      },
       initPaymentPaypalForm: function () {
-        let quoteTotal = quote.getTotals()();
-        let orderTotal = this.getSegment('grand_total').value;
-        const billingAddress = quote.billingAddress();
-        const items = quote.getItems();
-        let phone = billingAddress.telephone.replace(/^0/, '+61');
-        if (!phone.match(/^\+/)) {
-          phone = '+61' + phone;
-        }
         payfurl
-          .setOrderInfo({
-            orderItems: items.map(p => ({
-              name: p.name,
-              quantity: p.qty,
-              sku: p.sku,
-              unitPrice: p.price,
-              totalAmount: p.price * p.qty,
-            })),
-            taxAmount: quoteTotal.tax_amount,
-            shippingAmount: quoteTotal.shipping_amount,
-            discountAmount: quoteTotal.discount_amount,
-          })
-          .setBillingAddress({
-            firstName: billingAddress.firstname,
-            lastName: billingAddress.lastname,
-            email: this.customerEmail,
-            phoneNumber: phone,
-            streetAddress: billingAddress.street[0],
-            city: billingAddress.city,
-            country: billingAddress.countryId,
-            region: billingAddress.region,
-            postalCode: billingAddress.postcode,
-            state: billingAddress.regionCode,
-          })
-          .setCustomerInfo({
-            firstName: billingAddress.firstname,
-            lastName: billingAddress.lastname,
-            email: this.customerEmail,
-            phoneNumber: phone,
-          })
           .addPaypal(
-            'payfurl-paypal-form',
-            orderTotal,
-            quoteTotal['quote_currency_code'],
-            payfurlConfig.getProvidersInfo()?.paypalProviders?.[0]
+            this.getFormId(),
+            this.getTotal(),
+            this.getCurrency(),
           );
 
         return this;

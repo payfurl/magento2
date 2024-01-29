@@ -10,33 +10,29 @@ define(
   function (ko, $, PayfurlBaseMethod, quote, payfurl, payfurlConfig) {
     'use strict';
 
-    window._quote = quote;
     return PayfurlBaseMethod.extend({
-      self: this,
       defaults: {
-        template: 'Payfurl_Payment/payment/payfurl-payto-form',
+        template: 'Payfurl_Payment/payment/payfurl-googlepay-form',
       },
-      getCode: function () {
-        return 'payfurl_payto_method';
+      getCode: function() {
+        return 'payfurl_googlepay';
       },
-      getTitle: function () {
-        return 'PayTo';
+      getTitle: function() {
+        return 'Google Pay';
       },
       getFormId: function () {
-        return 'payfurl-payto-form';
+        return 'payfurl-googlepay-form';
       },
-      initPaymentPayToForm: function () {
+      initPaymentGooglePayForm: function () {
         payfurl
-          .addPayTo(
+          .addGooglePay(
             this.getFormId(),
             this.getTotal(),
+            this.getCurrency(),
           );
 
         return this;
       },
-      /**
-       * Get payment method data
-       */
     });
   },
 );

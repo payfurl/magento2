@@ -34,62 +34,14 @@ define(
         return `payfurl-checkout-form-${this.getProviderType()}`;
       },
       initPaymentCheckoutForm: function () {
-        let quoteTotal = quote.getTotals()();
-        let orderTotal = this.getSegment('grand_total').value;
-        const billingAddress = quote.billingAddress();
-        const items = quote.getItems();
-        let phone = billingAddress.telephone.replace(/^0/, '+61');
-        if (!phone.match(/^\+/)) {
-          phone = '+61' + phone;
-        }
-        const orderItems = items.map(p => ({
-          name: p.name,
-          quantity: p.qty,
-          sku: p.sku,
-          unitPrice: p.price,
-          totalAmount: p.price * p.qty,
-        }));
-        const customer = {
-          firstName: billingAddress.firstname,
-          lastName: billingAddress.lastname,
-          email: this.customerEmail,
-          phoneNumber: phone,
-        };
-        const address = {
-          firstName: billingAddress.firstname,
-          lastName: billingAddress.lastname,
-          email: this.customerEmail,
-          phoneNumber: phone,
-          streetAddress: billingAddress.street[0],
-          city: billingAddress.city,
-          country: billingAddress.countryId,
-          region: billingAddress.region,
-          postalCode: billingAddress.postcode,
-          state: billingAddress.regionCode,
-        };
         payfurl
-          .setOrderInfo({
-            orderItems,
-            taxAmount: quoteTotal.tax_amount,
-            shippingAmount: quoteTotal.shipping_amount,
-            discountAmount: quoteTotal.discount_amount,
-          })
-          .setBillingAddress(address)
-          .setCustomerInfo(customer)
           .addBnpl(
             this.getFormId(),
-            orderTotal,
-            quoteTotal['quote_currency_code'],
+            this.getTotal(),
+            this.getCurrency(),
             this.getProviderType(),
             this.provider?.providerId,
-            {
-              taxAmount: quoteTotal.tax_amount,
-              shippingAmount: quoteTotal.shipping_amount,
-              discountAmount: quoteTotal.discount_amount,
-              orderItems,
-              customer,
-              billingAddress: address,
-            },
+            {},
             this.provider?.options
           );
 
