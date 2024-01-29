@@ -4,25 +4,21 @@
         <policy id="script-src">
             <values>
                 <value id="payfurl-js-sdk" type="host">*.payfurl.com</value>
-                <value id="payfurl-js-sdk-local" type="host">http://localhost:3001</value>
             </values>
         </policy>
         <policy id="connect-src">
             <values>
                 <value id="payfurl-api-connect" type="host">*.payfurl.com</value>
-                <value id="payfurl-api-connect-local" type="host">http://localhost:3001</value>
             </values>
         </policy>
         <policy id="style-src">
             <values>
                 <value id="payfurl-form-style" type="host">*.payfurl.com</value>
-                <value id="payfurl-form-style-local" type="host">http://localhost:3001</value>
             </values>
         </policy>
         <policy id="frame-src">
             <values>
                 <value id="payfurl-frame" type="host">*.payfurl.com</value>
-                <value id="payfurl-frame-local" type="host">http://localhost:3001</value>
             </values>
         </policy>
     </policies>
