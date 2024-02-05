@@ -45,6 +45,12 @@ define(
       getProvidersInfo: function() {
         return window.checkoutConfig.payment.payfurl.providersInfo;
       },
+      getMethod: function(value) {
+        return window.checkoutConfig.payment.payfurl.method;
+      },
+      setMethod: function(value) {
+        window.checkoutConfig.payment.payfurl.method = value;
+      },
       getCheckoutInfo: function(providerType) {
         switch (String(providerType).toUpperCase()) {
           case "AZUPAY": return {

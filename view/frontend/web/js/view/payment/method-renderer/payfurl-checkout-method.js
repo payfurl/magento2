@@ -47,9 +47,17 @@ define(
 
         return this;
       },
-      /**
-       * Get payment method data
-       */
+      getData: function () {
+        return {
+          'method': this.item.method,
+          'additional_data': {
+            'payfurlToken': payfurlConfig.getToken(),
+            'payfurlChargeId': payfurlConfig.getChargeId(),
+            'paymentMethodId': payfurlConfig.getPaymentMethodId(),
+            'payfurlSaveMyPayment': payfurlConfig.getSaveMyPaymentMethod(),
+          },
+        };
+      },
     });
   },
 );

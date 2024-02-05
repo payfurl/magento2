@@ -104,9 +104,7 @@ class AdditionalDataHandler implements HandlerInterface
         if (isset($transaction["paymentInformation"]) && !empty($transaction["paymentInformation"])) {
             $paymentInformation = $transaction["paymentInformation"];
 
-            if (!isset($paymentInformation['type'])
-                || ($paymentInformation['type'] != self::CARD_TYPE && $paymentInformation['type'] != self::PAYPAL_TYPE)
-            ) {
+            if (!isset($paymentInformation['type'])) {
                 return $additionalData;
             }
 

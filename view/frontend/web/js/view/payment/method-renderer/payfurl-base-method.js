@@ -54,7 +54,7 @@ define(
           payfurlConfig.setToken(payfurlToken);
           payfurlConfig.setChargeId(payfurlChargeId);
           if (self.isCustomerLoggedIn) {
-            self.payfurlConfig.setSaveMyPaymentMethod($('#save_my_payment_method').is(':checked'));
+            payfurlConfig.setSaveMyPaymentMethod($('#save_my_payment_method').is(':checked'));
           }
 
           self.isPlaceOrderActionAllowed(true);
@@ -104,20 +104,6 @@ define(
           });
 
         return this;
-      },
-      /**
-       * Get payment method data
-       */
-      getData: function () {
-        return {
-          'method': this.item.method,
-          'additional_data': {
-            'payfurlToken': payfurlConfig.getToken(),
-            'payfurlChargeId': payfurlConfig.getChargeId(),
-            'paymentMethodId': payfurlConfig.getPaymentMethodId(),
-            'payfurlSaveMyPayment': payfurlConfig.getSaveMyPaymentMethod(),
-          },
-        };
       },
       getSavedPaymentMethods: function () {
         let savedPayments = payfurlConfig.getSavedPaymentMethods();

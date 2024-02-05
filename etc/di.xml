@@ -322,6 +322,11 @@
             <argument name="customLogger" xsi:type="object">PayfurlLogger</argument>
         </arguments>
     </type>
+    <type name="Payfurl\Payment\Gateway\Request\PaymentDataBuilder">
+        <arguments>
+            <argument name="customLogger" xsi:type="object">PayfurlLogger</argument>
+        </arguments>
+    </type>
 
     <!-- Logger, initialized with PayfurlConfig -->
     <virtualType name="PayfurlLogger" type="Magento\Payment\Model\Method\Logger">

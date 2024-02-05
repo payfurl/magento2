@@ -46,7 +46,7 @@
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
                 <can_get_saved_payments>1</can_get_saved_payments>
                 <active>1</active>
-                <title>Paypal</title>
+                <title>GooglePay</title>
                 <order_status>pending_payment</order_status><!-- set default order status-->
                 <env>sandbox</env>
                 <sandbox_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
@@ -63,7 +63,7 @@
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
                 <can_get_saved_payments>1</can_get_saved_payments>
                 <active>1</active>
-                <title>Checkout</title>
+                <title>PayID</title>
                 <order_status>pending_payment</order_status><!-- set default order status-->
                 <env>sandbox</env>
                 <sandbox_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
@@ -80,7 +80,7 @@
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
                 <can_get_saved_payments>1</can_get_saved_payments>
                 <active>1</active>
-                <title>Checkout</title>
+                <title>PayTo</title>
                 <order_status>pending_payment</order_status><!-- set default order status-->
                 <env>sandbox</env>
                 <sandbox_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
@@ -97,7 +97,7 @@
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
                 <can_get_saved_payments>1</can_get_saved_payments>
                 <active>1</active>
-                <title>Checkout</title>
+                <title>Shift</title>
                 <order_status>pending_payment</order_status><!-- set default order status-->
                 <env>sandbox</env>
                 <sandbox_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
@@ -114,7 +114,7 @@
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
                 <can_get_saved_payments>1</can_get_saved_payments>
                 <active>1</active>
-                <title>Checkout</title>
+                <title>Pay By Account</title>
                 <order_status>pending_payment</order_status><!-- set default order status-->
                 <env>sandbox</env>
                 <sandbox_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
@@ -131,7 +131,7 @@
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
                 <can_get_saved_payments>1</can_get_saved_payments>
                 <active>1</active>
-                <title>Checkout</title>
+                <title>UPI</title>
                 <order_status>pending_payment</order_status><!-- set default order status-->
                 <env>sandbox</env>
                 <sandbox_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
