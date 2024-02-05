@@ -32,7 +32,7 @@
     </virtualType>
     <virtualType name="PayfurlCheckoutPayIdFacade" type="Magento\Payment\Model\Method\Adapter">
         <arguments>
-            <argument name="code" xsi:type="string">payfurl_checkout_payid</argument>
+            <argument name="code" xsi:type="string">payfurl_checkout_azupay</argument>
             <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
             <argument name="infoBlockType" xsi:type="string">Payfurl\Payment\Block\OrderTransactionInfo</argument>
             <argument name="valueHandlerPool" xsi:type="object">PayfurlPaymentCheckoutPayIdValueHandlerPool</argument>
@@ -150,7 +150,7 @@
     </virtualType>
     <virtualType name="PayfurlPaymentCheckoutPayIdConfig" type="Magento\Payment\Gateway\Config\Config">
         <arguments>
-            <argument name="methodCode" xsi:type="string">payfurl_checkout_payid</argument>
+            <argument name="methodCode" xsi:type="string">payfurl_checkout_azupay</argument>
         </arguments>
     </virtualType>
 

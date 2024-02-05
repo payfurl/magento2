@@ -10,22 +10,20 @@ define(
   function (ko, $, PayfurlBaseMethod, quote, payfurl, payfurlConfig) {
     'use strict';
 
-    window._quote = quote;
     return PayfurlBaseMethod.extend({
-      self: this,
       defaults: {
         template: 'Payfurl_Payment/payment/payfurl-payto-form',
       },
-      getCode: function () {
-        return 'payfurl_payto_method';
+      getCode: function() {
+        return 'payfurl_payto';
       },
-      getTitle: function () {
+      getTitle: function() {
         return 'PayTo';
       },
       getFormId: function () {
         return 'payfurl-payto-form';
       },
-      initPaymentPayToForm: function () {
+      initPaymentGooglePayForm: function () {
         payfurl
           .addPayTo(
             this.getFormId(),

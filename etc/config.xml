@@ -54,7 +54,7 @@
                 <public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
             </payfurl_googlepay>
-            <payfurl_checkout_payid>
+            <payfurl_checkout_azupay>
                 <payment_action>authorize_capture</payment_action><!-- You can use another methor like capture  -->
                 <model>PayfurlCheckoutPayIdFacade</model>
                 <can_use_checkout>1</can_use_checkout>
@@ -70,7 +70,7 @@
                 <sandbox_secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-            </payfurl_checkout_payid>
+            </payfurl_checkout_azupay>
             <payfurl_payto>
                 <payment_action>authorize_capture</payment_action><!-- You can use another methor like capture  -->
                 <model>PayfurlCheckoutPayToFacade</model>

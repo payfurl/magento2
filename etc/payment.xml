@@ -11,7 +11,7 @@
         <method name="payfurl_googlepay">
             <allow_multiple_address>1</allow_multiple_address>
         </method>
-        <method name="payfurl_checkout_payid">
+        <method name="payfurl_checkout_azupay">
             <allow_multiple_address>1</allow_multiple_address>
         </method>
         <method name="payfurl_payto">

@@ -32,7 +32,7 @@
                                                                         <item name="payfurl_googlepay" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                        <item name="payfurl_checkout_payid" xsi:type="array">
+                                                                        <item name="payfurl_checkout_azupay" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
                                                                         <item name="payfurl_payto" xsi:type="array">

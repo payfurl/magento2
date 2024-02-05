@@ -26,6 +26,22 @@
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
       </div>
+
+      <div class="actions-toolbar">
+        <div class="primary">
+          <button data-role="review-save"
+                  type="submit"
+                  data-bind="
+                            attr: {title: $t('Place Order')},
+                            enable: (getCode() == isChecked()),
+                            css: {disabled: !isPlaceOrderActionAllowed()}
+                            "
+                  class="action primary checkout"
+                  disabled>
+            <span data-bind="i18n: 'Place Order'"></span>
+          </button>
+        </div>
+      </div>
     </form>
   </div>
 </div>

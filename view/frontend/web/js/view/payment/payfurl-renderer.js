@@ -45,9 +45,6 @@ define(
     if (providersInfo.hasBnplProviders) {
       for (const provider of providersInfo.bnplProviders) {
         let type = provider.providerType;
-        if (type === "azupay") {
-          type = "payid";
-        }
         rendererList.push(
           {
             type: `payfurl_checkout_${type}`,
