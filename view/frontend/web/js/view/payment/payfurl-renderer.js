@@ -2,10 +2,12 @@ define(
   [
     'uiComponent',
     'Magento_Checkout/js/model/payment/renderer-list',
+    'Payfurl_Payment/js/model/payfurl-configuration',
   ],
   function (
     Component,
     rendererList,
+    payfurlConfig
   ) {
     'use strict';
 
@@ -33,7 +35,7 @@ define(
       );
     }
 
-    if (providersInfo.hasGooglePayProviders) {
+    if (payfurlConfig.isGooglePayEnabled() && providersInfo.hasGooglePayProviders) {
       rendererList.push(
         {
           type: 'payfurl_googlepay',

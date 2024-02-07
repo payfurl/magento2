@@ -43,6 +43,7 @@ class ConfigProvider implements ConfigProviderInterface
                         'enabled' => $this->config->isActive(),
                         'debug' => $this->config->isDebug(),
                         'env' => $this->config->getEnv(),
+                        'enableGooglePay' => $this->config->isGooglePay(),
                         'publicKey' => $this->getCurrentPublicKey(),
                         'title' => $this->config->getTitle(),
                         'getSavedPayments' => $this->getSavedPayments(),

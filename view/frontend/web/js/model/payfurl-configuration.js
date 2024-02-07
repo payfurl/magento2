@@ -9,6 +9,9 @@ define(
       getEnv: function() {
         return window.checkoutConfig.payment.payfurl.env;
       },
+      isGooglePayEnabled: function() {
+        return window.checkoutConfig.payment.payfurl.enableGooglePay;
+      },
       getTitle: function() {
         return window.checkoutConfig.payment.payfurl.title;
       },

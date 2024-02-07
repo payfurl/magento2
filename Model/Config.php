@@ -10,6 +10,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const ACTIVE = 'active';
     const DEBUG = 'debug';
     const ENV = 'env';
+    const ENABLE_GOOGLEPAY = 'enable_googlepay';
 
     const ENV_SANDBOX = 'sandbox';
 
@@ -49,6 +50,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function isDebug(): bool
     {
         return (bool)(int)$this->getScopeConfigValue(self::DEBUG);
+    }
+
+    public function isGooglePay(): bool
+    {
+        return (bool)(int)$this->getScopeConfigValue(self::ENABLE_GOOGLEPAY);
     }
 
     public function getEnv(): string
