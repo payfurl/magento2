@@ -67,10 +67,6 @@ class ConfigProvider implements ConfigProviderInterface
 
     protected function getSavedPayments()
     {
-        if (!$this->config->canGetSavedPayments()) {
-            return false;
-        }
-
         if (empty($this->savedPaymentMethods)) {
             $customerPayfurlId = $this->getCustomerPayfurlId();
 

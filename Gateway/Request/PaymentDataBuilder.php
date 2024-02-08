@@ -78,11 +78,7 @@ class PaymentDataBuilder implements BuilderInterface
             $result["PaymentMethodId"] = $payment->getAdditionalInformation('paymentMethodId');
         }
 
-        if ($payment->getAdditionalInformation('payfurlSaveMyPayment')) {
-            $result["payfurlSaveMyPayment"] = $payment->getAdditionalInformation('payfurlSaveMyPayment');
-        } else {
-            $result["payfurlSaveMyPayment"] = false;
-        }
+        $result["payfurlSaveMyPayment"] = (bool)$payment->getAdditionalInformation('payfurlSaveMyPayment');
 
         return $result;
     }
