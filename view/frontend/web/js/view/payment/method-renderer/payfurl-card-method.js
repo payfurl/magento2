@@ -29,7 +29,10 @@ define(
             this.getFormId(),
             this.getTotal(),
             this.getCurrency(),
-            { threeDSEmail: this.customerEmail },
+            {
+              threeDSEmail: this.customerEmail,
+              clickToPayEnabled: false,
+            },
           );
 
         return this;
