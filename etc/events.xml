@@ -8,10 +8,6 @@
         <observer name="payfurl_gateway_data_assign"
                   instance="\Payfurl\Payment\Observer\PayfurlAssignAdditionalDataObserver"/>
     </event>
-    <event name="payment_method_assign_data_payfurl_paypal">
-        <observer name="payfurl_gateway_data_assign"
-                  instance="\Payfurl\Payment\Observer\PayfurlAssignAdditionalDataObserver"/>
-    </event>
     <event name="payment_method_assign_data_payfurl_googlepay">
         <observer name="payfurl_gateway_data_assign"
                   instance="\Payfurl\Payment\Observer\PayfurlAssignAdditionalDataObserver"/>
