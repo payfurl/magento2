@@ -1,6 +1,34 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="payment_method_assign_data_payfurl">
+    <event name="payment_method_assign_data_payfurl_card">
+        <observer name="payfurl_gateway_data_assign"
+                  instance="\Payfurl\Payment\Observer\PayfurlAssignAdditionalDataObserver"/>
+    </event>
+    <event name="payment_method_assign_data_payfurl_paypal">
+        <observer name="payfurl_gateway_data_assign"
+                  instance="\Payfurl\Payment\Observer\PayfurlAssignAdditionalDataObserver"/>
+    </event>
+    <event name="payment_method_assign_data_payfurl_googlepay">
+        <observer name="payfurl_gateway_data_assign"
+                  instance="\Payfurl\Payment\Observer\PayfurlAssignAdditionalDataObserver"/>
+    </event>
+    <event name="payment_method_assign_data_payfurl_checkout_azupay">
+        <observer name="payfurl_gateway_data_assign"
+                  instance="\Payfurl\Payment\Observer\PayfurlAssignAdditionalDataObserver"/>
+    </event>
+    <event name="payment_method_assign_data_payfurl_payto">
+        <observer name="payfurl_gateway_data_assign"
+                  instance="\Payfurl\Payment\Observer\PayfurlAssignAdditionalDataObserver"/>
+    </event>
+    <event name="payment_method_assign_data_payfurl_checkout_shift">
+        <observer name="payfurl_gateway_data_assign"
+                  instance="\Payfurl\Payment\Observer\PayfurlAssignAdditionalDataObserver"/>
+    </event>
+    <event name="payment_method_assign_data_payfurl_checkout_pay_by_account">
+        <observer name="payfurl_gateway_data_assign"
+                  instance="\Payfurl\Payment\Observer\PayfurlAssignAdditionalDataObserver"/>
+    </event>
+    <event name="payment_method_assign_data_payfurl_checkout_upi">
         <observer name="payfurl_gateway_data_assign"
                   instance="\Payfurl\Payment\Observer\PayfurlAssignAdditionalDataObserver"/>
     </event>

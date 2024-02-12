@@ -1,24 +1,144 @@
 <?xml version="1.0"?>
+<!-- https://developer.adobe.com/commerce/php/development/payments-integrations/ -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <payment>
-            <payfurl>
+            <payfurl_card>
                 <payment_action>authorize_capture</payment_action><!-- You can use another methor like capture  -->
-                <model>PayfurlFacade</model>
+                <model>PayfurlCardFacade</model>
                 <can_use_checkout>1</can_use_checkout>
                 <can_capture>1</can_capture>
                 <can_refund>1</can_refund>
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
                 <can_get_saved_payments>1</can_get_saved_payments>
                 <active>1</active>
-                <title>Payment</title>
+                <title>Card Payment</title>
                 <order_status>pending_payment</order_status><!-- set default order status-->
                 <env>sandbox</env>
                 <sandbox_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <sandbox_secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-            </payfurl>
+            </payfurl_card>
+            <payfurl_paypal>
+                <payment_action>authorize_capture</payment_action><!-- You can use another methor like capture  -->
+                <model>PayfurlPaypalFacade</model>
+                <can_use_checkout>1</can_use_checkout>
+                <can_capture>1</can_capture>
+                <can_refund>1</can_refund>
+                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_get_saved_payments>1</can_get_saved_payments>
+                <active>1</active>
+                <title>Paypal</title>
+                <order_status>pending_payment</order_status><!-- set default order status-->
+                <env>sandbox</env>
+                <sandbox_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <sandbox_secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+            </payfurl_paypal>
+            <payfurl_googlepay>
+                <payment_action>authorize_capture</payment_action><!-- You can use another methor like capture  -->
+                <model>PayfurlGooglePayFacade</model>
+                <can_use_checkout>1</can_use_checkout>
+                <can_capture>1</can_capture>
+                <can_refund>1</can_refund>
+                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_get_saved_payments>1</can_get_saved_payments>
+                <active>1</active>
+                <title>GooglePay</title>
+                <order_status>pending_payment</order_status><!-- set default order status-->
+                <env>sandbox</env>
+                <sandbox_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <sandbox_secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+            </payfurl_googlepay>
+            <payfurl_checkout_azupay>
+                <payment_action>authorize_capture</payment_action><!-- You can use another methor like capture  -->
+                <model>PayfurlCheckoutPayIdFacade</model>
+                <can_use_checkout>1</can_use_checkout>
+                <can_capture>1</can_capture>
+                <can_refund>1</can_refund>
+                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_get_saved_payments>1</can_get_saved_payments>
+                <active>1</active>
+                <title>PayID</title>
+                <order_status>pending_payment</order_status><!-- set default order status-->
+                <env>sandbox</env>
+                <sandbox_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <sandbox_secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+            </payfurl_checkout_azupay>
+            <payfurl_payto>
+                <payment_action>authorize_capture</payment_action><!-- You can use another methor like capture  -->
+                <model>PayfurlCheckoutPayToFacade</model>
+                <can_use_checkout>1</can_use_checkout>
+                <can_capture>1</can_capture>
+                <can_refund>1</can_refund>
+                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_get_saved_payments>1</can_get_saved_payments>
+                <active>1</active>
+                <title>PayTo</title>
+                <order_status>pending_payment</order_status><!-- set default order status-->
+                <env>sandbox</env>
+                <sandbox_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <sandbox_secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+            </payfurl_payto>
+            <payfurl_checkout_shift>
+                <payment_action>authorize_capture</payment_action><!-- You can use another methor like capture  -->
+                <model>PayfurlCheckoutShiftFacade</model>
+                <can_use_checkout>1</can_use_checkout>
+                <can_capture>1</can_capture>
+                <can_refund>1</can_refund>
+                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_get_saved_payments>1</can_get_saved_payments>
+                <active>1</active>
+                <title>Shift</title>
+                <order_status>pending_payment</order_status><!-- set default order status-->
+                <env>sandbox</env>
+                <sandbox_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <sandbox_secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+            </payfurl_checkout_shift>
+            <payfurl_checkout_pay_by_account>
+                <payment_action>authorize_capture</payment_action><!-- You can use another methor like capture  -->
+                <model>PayfurlCheckoutPayByAccountFacade</model>
+                <can_use_checkout>1</can_use_checkout>
+                <can_capture>1</can_capture>
+                <can_refund>1</can_refund>
+                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_get_saved_payments>1</can_get_saved_payments>
+                <active>1</active>
+                <title>Pay By Account</title>
+                <order_status>pending_payment</order_status><!-- set default order status-->
+                <env>sandbox</env>
+                <sandbox_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <sandbox_secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+            </payfurl_checkout_pay_by_account>
+            <payfurl_checkout_upi>
+                <payment_action>authorize_capture</payment_action><!-- You can use another methor like capture  -->
+                <model>PayfurlCheckoutUpiFacade</model>
+                <can_use_checkout>1</can_use_checkout>
+                <can_capture>1</can_capture>
+                <can_refund>1</can_refund>
+                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_get_saved_payments>1</can_get_saved_payments>
+                <active>1</active>
+                <title>UPI</title>
+                <order_status>pending_payment</order_status><!-- set default order status-->
+                <env>sandbox</env>
+                <sandbox_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <sandbox_secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+            </payfurl_checkout_upi>
         </payment>
     </default>
 </config>

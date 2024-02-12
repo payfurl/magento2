@@ -4,21 +4,31 @@
         <policy id="script-src">
             <values>
                 <value id="payfurl-js-sdk" type="host">*.payfurl.com</value>
+                <value id="mastercard-js-sdk" type="host">*.mastercard.com</value>
             </values>
         </policy>
         <policy id="connect-src">
             <values>
                 <value id="payfurl-api-connect" type="host">*.payfurl.com</value>
+                <value id="mastercard-api" type="host">*.mastercard.com</value>
             </values>
         </policy>
         <policy id="style-src">
             <values>
                 <value id="payfurl-form-style" type="host">*.payfurl.com</value>
+                <value id="mastercard-style" type="host">*.mastercard.com</value>
             </values>
         </policy>
         <policy id="frame-src">
             <values>
                 <value id="payfurl-frame" type="host">*.payfurl.com</value>
+                <value id="mastercard-frame" type="host">*.mastercard.com</value>
+            </values>
+        </policy>
+        <policy id="img-src">
+            <values>
+                <value id="payfurl-img" type="host">*.payfurl.com</value>
+                <value id="mastercard-img" type="host">*.mastercard.com</value>
             </values>
         </policy>
     </policies>

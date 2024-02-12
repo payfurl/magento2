@@ -5,7 +5,7 @@
             <group id="payfurl" translate="label" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <attribute type="expanded">1</attribute>
                 <attribute type="displayIn">recommended_solutions</attribute>
-                <fieldset_css>adyen-payments complex</fieldset_css>
+                <fieldset_css>payfurl-payments complex</fieldset_css>
                 <label>PayFURL Payment</label>
                 <field id="active" translate="label comment" sortOrder="1" type="select" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Enabled</label>
@@ -46,10 +46,13 @@
                         <field id="env">production</field>
                     </depends>
                 </field>
+                <field id="enable_googlepay" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enable GooglePay</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
                 <field id="debug" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Debug</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <config_path>payment/payfurl/debug</config_path>
                 </field>
                 <field id="key_validation" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label></label>

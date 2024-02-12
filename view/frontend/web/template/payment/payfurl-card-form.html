@@ -1,0 +1,105 @@
+<div class="payfurl payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
+  <div class="payment-method-title field choice">
+    <input type="radio"
+           name="payment[method]"
+           class="radio"
+           data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
+    <label data-bind="attr: {'for': getCode()}" class="label">
+      <img class="payment-icon" width="50"
+           data-bind="attr: {'src': require.toUrl('Payfurl_Payment/images/card.svg') , 'alt': getTitle()}"/>
+      <span data-bind="text: getTitle()"></span>
+    </label>
+  </div>
+  <div class="payment-method-content">
+    <!-- ko foreach: getRegion('messages') -->
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    <!--/ko-->
+    <div class="payment-method-billing-address">
+      <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+      <!-- ko template: getTemplate() --><!-- /ko -->
+      <!--/ko-->
+    </div>
+
+    <!-- ko if: getSavedPaymentMethods() -->
+    <div class="payment-method-title">
+      <input type="radio"
+             id="payment_payfurl_radio_saved_card"
+             name="payment_payfurl_radio"
+             class="radio"
+             data-bind="checked: checkCard"
+             value="saved"
+      />
+      <label for="payment_payfurl_radio_saved_card" class="label">
+        <span>Pay by saved payment methods</span>
+      </label>
+    </div>
+    <div id="payfurl-saved-methods" data-bind="visible: checkCard() == 'saved'">
+      <div id="payfurl-checkout-saved"></div>
+      <select data-bind="foreach: getSavedPaymentMethods()" id="payfurl-checkout-saved-select">
+        <option data-bind="
+                        text: cardHolder + ' - ' + cardType + ' - ' + cardNumber,
+                        value: paymentMethodId">
+        </option>
+      </select>
+      <div class="actions-toolbar">
+        <div class="primary">
+          <button class="action primary checkout"
+                  data-bind="
+                            click: placeOrderWithSavedCard,
+                            attr: {title: $t('Place Order')},
+                            enable: (getCode() == isChecked()),
+                            css: {disabled: !isPlaceOrderActionAllowed()}
+                            "
+                  disabled>
+            <span data-bind="i18n: 'Place Order'"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- /ko -->
+
+    <!-- ko if: getSavedPaymentMethods() -->
+    <div class="payment-method-title" style="margin-top: 20px">
+      <input type="radio"
+             id="payment_payfurl_radio_new_card"
+             name="payment_payfurl_radio"
+             class="radio"
+             data-bind="checked: checkCard"
+             value="new"
+      />
+      <label for="payment_payfurl_radio_new_card" class="label">
+        <span>Pay a new payment method</span>
+      </label>
+    </div>
+    <!-- /ko -->
+
+    <form class="form" action="#" method="post" data-bind="visible: checkCard() == 'new'">
+      <div id="payfurl-card-form" data-bind="afterRender: initPaymentCardForm()"></div>
+      <div class="checkout-agreements-block">
+        <!-- ko foreach: $parent.getRegion('before-place-order') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+      </div>
+
+      <div class="actions-toolbar">
+        <input type="checkbox" id="save_my_payment_method" value="save"/>
+        <label for="save_my_payment_method" class="label">
+          <span>Save my payment method</span>
+        </label>
+        <div class="primary">
+          <button data-role="review-save"
+                  type="submit"
+                  data-bind="
+                            attr: {title: $t('Place Order')},
+                            enable: (getCode() == isChecked()),
+                            css: {disabled: !isPlaceOrderActionAllowed()}
+                            "
+                  class="action primary checkout"
+                  disabled>
+            <span data-bind="i18n: 'Place Order'"></span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

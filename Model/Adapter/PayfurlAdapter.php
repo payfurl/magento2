@@ -125,6 +125,20 @@ class PayfurlAdapter
         }
     }
 
+    public function getProvidersInfo($data)
+    {
+        $svc = new PayFurlSDK\Info();
+
+        try {
+            return $svc->Providers($data);
+        } catch (PayFurlSDK\ResponseException $exception) {
+            return [
+                'errorMessage' => $exception->getMessage(),
+                'errorCode' => $exception->getCode()
+            ];
+        }
+    }
+
     protected function chargeForExistPayFurlCustomer($data, $customerPayfurlId)
     {
         $customerSdk = new PayFurlSDK\Customer();

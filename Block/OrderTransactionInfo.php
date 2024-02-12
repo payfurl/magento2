@@ -75,6 +75,7 @@ class OrderTransactionInfo extends \Magento\Payment\Block\Info
                 );
             }
 
+
             if ($payment->getAdditionalInformation(self::PAYFURL_TYPE) == self::CARD_TYPE) {
                 $this->setDataToTransfer(
                     $transport,

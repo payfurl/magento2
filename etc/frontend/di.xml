@@ -7,11 +7,18 @@
             </argument>
         </arguments>
     </type>
-<!--    <type name="Magento\Checkout\Block\Onepage">-->
-<!--        <arguments>-->
-<!--            <argument name="layoutProcessors" xsi:type="array">-->
-<!--                <item name="payfurlLayoutProcessor" xsi:type="object">Payfurl\Payment\Block\Checkout\PayfurlLayoutProcessor</item>-->
-<!--            </argument>-->
-<!--        </arguments>-->
-<!--    </type>-->
+    <type name="Payfurl\Payment\Model\Ui\ConfigProvider">
+        <arguments>
+            <argument name="methods" xsi:type="array">
+                <item name="payfurl_card" xsi:type="string">Payfurl_Payment/js/view/payment/method-renderer/payfurl-card-method</item>
+                <item name="payfurl_paypal" xsi:type="string">Payfurl_Payment/js/view/payment/method-renderer/payfurl-paypal-method</item>
+                <item name="payfurl_googlepay" xsi:type="string">Payfurl_Payment/js/view/payment/method-renderer/payfurl-googlepay-method</item>
+                <item name="payfurl_checkout_azupay" xsi:type="string">Payfurl_Payment/js/view/payment/method-renderer/payfurl-checkout-method</item>
+                <item name="payfurl_payto" xsi:type="string">Payfurl_Payment/js/view/payment/method-renderer/payfurl-payto-method</item>
+                <item name="payfurl_checkout_shift" xsi:type="string">Payfurl_Payment/js/view/payment/method-renderer/payfurl-checkout-method</item>
+                <item name="payfurl_checkout_pay_by_account" xsi:type="string">Payfurl_Payment/js/view/payment/method-renderer/payfurl-checkout-method</item>
+                <item name="payfurl_checkout_upi" xsi:type="string">Payfurl_Payment/js/view/payment/method-renderer/payfurl-checkout-method</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
