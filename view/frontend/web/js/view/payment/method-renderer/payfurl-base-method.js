@@ -41,12 +41,13 @@ define(
 
         const self = this;
 
-        /*change amount after quote change*/
-        quote.totals.subscribe(function (newValue) {
-          payfurl.setAmount(self.getSegment('grand_total').value);
+        quote.totals.subscribe(function () {
+          self.setOrderInfo(quote.getTotals()(), quote.getItems());
+        });
+        quote.billingAddress.subscribe(function () {
+          self.setBillingAddress(quote.billingAddress());
         });
 
-        // Credit Card form handle
         payfurl.onSuccess(function (response) {
           const payfurlToken = response.token || '';
           const payfurlChargeId = response.transactionId || '';
@@ -64,44 +65,53 @@ define(
           self.isPlaceOrderActionAllowed(false);
         });
 
-        let quoteTotal = quote.getTotals()();
-        const billingAddress = quote.billingAddress();
-        const items = quote.getItems();
-        let phone = billingAddress.telephone.replace(/^0/, '+61');
-        if (!phone.match(/^\+/)) {
+        this.setBillingAddress(quote.billingAddress());
+        this.setOrderInfo(quote.getTotals()(), quote.getItems());
+
+        return this;
+      },
+      setBillingAddress: function (billingAddress) {
+        let phone = billingAddress?.telephone?.replace(/^0/, '+61') || "";
+        if (phone && !phone.match(/^\+/)) {
           phone = '+61' + phone;
         }
         payfurl
+          .setBillingAddress({
+            firstName: billingAddress?.firstname,
+            lastName: billingAddress?.lastname,
+            email: this.customerEmail,
+            phoneNumber: phone,
+            streetAddress: billingAddress?.street?.[0],
+            city: billingAddress?.city,
+            country: billingAddress?.countryId,
+            region: billingAddress?.region,
+            postalCode: billingAddress?.postcode,
+            state: billingAddress?.regionCode,
+          })
+          .setCustomerInfo({
+            firstName: billingAddress?.firstname,
+            lastName: billingAddress?.lastname,
+            email: this.customerEmail,
+            phoneNumber: phone,
+          });
+
+        return this;
+      },
+      setOrderInfo: function (quoteTotal, items) {
+        payfurl
+          .setAmount(quoteTotal?.grand_total)
           .setOrderInfo({
-            orderItems: items.map(p => ({
+            orderItems: items?.map(p => ({
               name: p.name,
               quantity: p.qty,
               sku: p.sku,
               unitPrice: p.price,
               totalAmount: p.price * p.qty,
             })),
-            taxAmount: quoteTotal.tax_amount,
-            shippingAmount: quoteTotal.shipping_amount,
-            discountAmount: quoteTotal.discount_amount,
+            taxAmount: quoteTotal?.tax_amount,
+            shippingAmount: quoteTotal?.shipping_amount,
+            discountAmount: quoteTotal?.discount_amount,
           })
-          .setBillingAddress({
-            firstName: billingAddress.firstname,
-            lastName: billingAddress.lastname,
-            email: this.customerEmail,
-            phoneNumber: phone,
-            streetAddress: billingAddress.street[0],
-            city: billingAddress.city,
-            country: billingAddress.countryId,
-            region: billingAddress.region,
-            postalCode: billingAddress.postcode,
-            state: billingAddress.regionCode,
-          })
-          .setCustomerInfo({
-            firstName: billingAddress.firstname,
-            lastName: billingAddress.lastname,
-            email: this.customerEmail,
-            phoneNumber: phone,
-          });
 
         return this;
       },
