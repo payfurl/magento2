@@ -23,6 +23,8 @@ class Validate extends Action
 
     protected $cacheTypeList;
 
+    protected $_encryptor;
+
     /**
      * Validate constructor.
      * @param Action\Context $context
@@ -31,11 +33,13 @@ class Validate extends Action
     public function __construct(
         Action\Context $context,
         Config $config,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\Framework\Encryption\EncryptorInterface $encryptor
     ) {
         parent::__construct($context);
         $this->config = $config;
         $this->cacheTypeList = $cacheTypeList;
+        $this->_encryptor = $encryptor;
     }
 
     /**
@@ -51,17 +55,17 @@ class Validate extends Action
 
         if (false !== strpos($publicKey, '*')) {
             if ($environment === Config::ENV_SANDBOX) {
-                $publicKey = $this->config->getValue(Config::SANDBOX_PUBLIC_KEY, $storeId);
+                $publicKey = $this->_encryptor->decrypt($this->config->getValue(Config::SANDBOX_PUBLIC_KEY, $storeId));
             } else {
-                $publicKey = $this->config->getValue(Config::LIVE_PUBLIC_KEY, $storeId);
+                $publicKey = $this->_encryptor->decrypt($this->config->getValue(Config::LIVE_PUBLIC_KEY, $storeId));
             }
         }
 
         if (false !== strpos($privateKey, '*')) {
             if ($environment === Config::ENV_SANDBOX) {
-                $privateKey = $this->config->getValue(Config::SANDBOX_SECRET_KEY, $storeId);
+                $privateKey = $this->_encryptor->decrypt($this->config->getValue(Config::SANDBOX_SECRET_KEY, $storeId));
             } else {
-                $privateKey = $this->config->getValue(Config::LIVE_SECRET_KEY, $storeId);
+                $privateKey = $this->_encryptor->decrypt($this->config->getValue(Config::LIVE_SECRET_KEY, $storeId));
             }
         }
 
