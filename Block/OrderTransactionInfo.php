@@ -17,9 +17,7 @@ class OrderTransactionInfo extends \Magento\Payment\Block\Info
     const PAYFURL_TYPE = "payfurlType";
     const CARD_TYPE = "CARD";
 
-    const PAYPAL_TYPE = "PAYPAL";
-
-    const PAYPAL_EMAIL = "paypalEmail";
+    const CUSTOMER_EMAIL = "customerEmail";
 
     const CARD_NUMBER = 'cardNumber';
 
@@ -35,7 +33,7 @@ class OrderTransactionInfo extends \Magento\Payment\Block\Info
     const CURRENCY = "currency";
     const PROVIDER_NAME = "providerName";
 
-    const TRANSACTION_PAYPAL_EMAIL_LABEL = "Paypal Email";
+    const TRANSACTION_PAYPAL_EMAIL_LABEL = "Email";
 
     const TRANSACTION_CARD_NUMBER_LABEL = 'Credit Card Number';
 
@@ -67,11 +65,11 @@ class OrderTransactionInfo extends \Magento\Payment\Block\Info
                 $payment->getAdditionalInformation(self::PAYFURL_TYPE)
             );
 
-            if ($payment->getAdditionalInformation(self::PAYFURL_TYPE) == self::PAYPAL_TYPE) {
+            if ($payment->getAdditionalInformation(self::PAYFURL_TYPE) != self::CARD_TYPE && $payment->getAdditionalInformation(self::CUSTOMER_EMAIL)) {
                 $this->setDataToTransfer(
                     $transport,
                     self::TRANSACTION_PAYPAL_EMAIL_LABEL,
-                    $payment->getAdditionalInformation(self::PAYPAL_EMAIL)
+                    $payment->getAdditionalInformation(self::CUSTOMER_EMAIL)
                 );
             }
 
