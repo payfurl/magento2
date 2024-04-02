@@ -18,9 +18,7 @@ class AdditionalDataHandler implements HandlerInterface
     const PAYFURL_TYPE = "payfurlType";
     const CARD_TYPE = "CARD";
 
-    const PAYPAL_TYPE = "PAYPAL";
-
-    const PAYPAL_EMAIL = "paypalEmail";
+    const CUSTOMER_EMAIL = "customerEmail";
 
     const CARD_NUMBER = 'cardNumber';
 
@@ -88,6 +86,7 @@ class AdditionalDataHandler implements HandlerInterface
             \Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS,
             $additionalData
         );
+        $payment->setMethod($this->getPaymentMethod($additionalData[self::PAYFURL_TYPE]));
     }
 
     /**
@@ -152,8 +151,8 @@ class AdditionalDataHandler implements HandlerInterface
      */
     private function getPaypalInformation(&$additionalData, $paymentInformation)
     {
-        if ($paymentInformation["type"] == self::PAYPAL_TYPE) {
-            $additionalData[self::PAYPAL_EMAIL] = $paymentInformation["email"];
+        if ($paymentInformation["type"] != self::CARD_TYPE) {
+            $additionalData[self::CUSTOMER_EMAIL] = $paymentInformation["email"];
         }
     }
 
@@ -180,6 +179,36 @@ class AdditionalDataHandler implements HandlerInterface
                 $additionalData[self::REFUND_DATE] = $lastRefundTransaction["dateAdded"];
                 $additionalData[self::REFUND_COMMENT] = $lastRefundTransaction["comment"];
             }
+        }
+    }
+
+    private function getPaymentMethod($type)
+    {
+        switch ($type) {
+            case "PAYPAL":
+                return "payfurl_paypal";
+            case "PAYTO":
+                return "payfurl_payto";
+            case "PAYID":
+                return "payfurl_checkout_azupay";
+            case "OPTTY":
+                return "payfurl_checkout_optty";
+            case "GOOGLEPAY":
+                return "payfurl_googlepay";
+            case "APPLEPAY":
+                return "payfurl_applepay";
+            case "SHIFT":
+                return "payfurl_checkout_shift";
+            case "PESAPAL":
+                return "payfurl_checkout_pesapal";
+            case "PAYBYACCOUNT":
+                return "payfurl_checkout_pay_by_account";
+            case "UPI":
+                return "payfurl_checkout_upi";
+            case "PAYGLOCAL":
+                return "payfurl_checkout_payglocal";
+            default:
+                return "payfurl_card";
         }
     }
 }
