@@ -46,6 +46,18 @@ class OrderTransactionInfo extends \Magento\Payment\Block\Info
 
     const CURRENCY_LABEL = "Currency";
     const PROVIDER_NAME_LABEL = "Provider Name";
+
+    protected $timezone;
+
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
+        array $data = [])
+    {
+        parent::__construct($context, $data);
+        $this->timezone = $timezone;
+    }
+
     /**
      * Prepare payment information
      *
@@ -102,10 +114,11 @@ class OrderTransactionInfo extends \Magento\Payment\Block\Info
                     $payment->getAdditionalInformation(self::STATUS)
                 );
 
+                $dateAdded = $payment->getAdditionalInformation(self::DATE_ADDED);
                 $this->setDataToTransfer(
                     $transport,
                     self::DATE_ADDED_LABEL,
-                    $payment->getAdditionalInformation(self::DATE_ADDED)
+                    $this->timezone->date(new \DateTime($dateAdded))->format('M j, Y g:i:s A')
                 );
 
                 $this->setDataToTransfer(
@@ -134,8 +147,8 @@ class OrderTransactionInfo extends \Magento\Payment\Block\Info
      */
     protected function setDataToTransfer(
         \Magento\Framework\DataObject $transport,
-        $field,
-        $value
+                                      $field,
+                                      $value
     ) {
         $transport->setData(
             (string)$this->getLabel($field),
