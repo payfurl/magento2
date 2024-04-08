@@ -7,7 +7,7 @@
 let config = {
     map: {
         '*': {
-            'payfurljs': 'https://assets.payfurl.com/v4.5.9/js/payfurl.js',
+            'payfurljs': 'https://assets.payfurl.com/v4.6.2/js/payfurl.js',
         }
     }
 };
