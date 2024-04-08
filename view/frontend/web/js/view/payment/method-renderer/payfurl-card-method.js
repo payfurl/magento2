@@ -31,7 +31,7 @@ define(
             this.getCurrency(),
             {
               threeDSEmail: this.customerEmail,
-              clickToPayEnabled: false,
+              style: "compact"
             },
           );
 
