@@ -5,12 +5,21 @@
             <values>
                 <value id="payfurl-js-sdk" type="host">*.payfurl.com</value>
                 <value id="mastercard-js-sdk" type="host">*.mastercard.com</value>
+                <value id="discovercard-js-sdk" type="host">*.discovercard.com</value>
+                <value id="discover-js-sdk" type="host">*.discover.com</value>
+                <value id="visa-js-sdk" type="host">*.visa.com</value>
+                <value id="amex-js-sdk" type="host">*.aexp-static.com</value>
+                <value id="online-metrix-js-sdk" type="host">*.online-metrix.net</value>
             </values>
         </policy>
         <policy id="connect-src">
             <values>
                 <value id="payfurl-api-connect" type="host">*.payfurl.com</value>
                 <value id="mastercard-api" type="host">*.mastercard.com</value>
+                <value id="discover-api" type="host">*.discover.com</value>
+                <value id="discovercard-api" type="host">*.discovercard.com</value>
+                <value id="advancedpaymentscert-api" type="host">advancedpaymentscert.com</value>
+                <value id="advancedpaymentscert-api2" type="host">*.advancedpaymentscert.com</value>
             </values>
         </policy>
         <policy id="style-src">
@@ -29,6 +38,8 @@
             <values>
                 <value id="payfurl-img" type="host">*.payfurl.com</value>
                 <value id="mastercard-img" type="host">*.mastercard.com</value>
+                <value id="discover-img" type="host">*.discovercard.com</value>
+                <value id="online-metrix-img" type="host">*.online-metrix.net</value>
             </values>
         </policy>
     </policies>
