@@ -9,8 +9,14 @@ define(
       getEnv: function() {
         return window.checkoutConfig.payment.payfurl.env;
       },
+      isSafari: function() {
+        return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+      },
       isGooglePayEnabled: function() {
         return window.checkoutConfig.payment.payfurl.enableGooglePay;
+      },
+      isApplePayEnabled: function() {
+        return window.checkoutConfig.payment.payfurl.enableApplePay;
       },
       getTitle: function() {
         return window.checkoutConfig.payment.payfurl.title;

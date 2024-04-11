@@ -30,6 +30,16 @@
             <argument name="commandPool" xsi:type="object">PayfurlCommandPool</argument>
         </arguments>
     </virtualType>
+    <virtualType name="PayfurlApplePayFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="string">payfurl_applepay</argument>
+            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Payfurl\Payment\Block\OrderTransactionInfo</argument>
+            <argument name="valueHandlerPool" xsi:type="object">PayfurlPaymentApplePayValueHandlerPool</argument>
+            <argument name="validatorPool" xsi:type="object">PayfurlValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">PayfurlCommandPool</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="PayfurlCheckoutPayIdFacade" type="Magento\Payment\Model\Method\Adapter">
         <arguments>
             <argument name="code" xsi:type="string">payfurl_checkout_azupay</argument>
@@ -133,6 +143,24 @@
     <virtualType name="PayfurlPaymentGooglePayConfig" type="Magento\Payment\Gateway\Config\Config">
         <arguments>
             <argument name="methodCode" xsi:type="string">payfurl_googlepay</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="PayfurlPaymentApplePayValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">PayfurlPaymentApplePayConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PayfurlPaymentApplePayConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">PayfurlPaymentApplePayConfig</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PayfurlPaymentApplePayConfig" type="Magento\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="string">payfurl_applepay</argument>
         </arguments>
     </virtualType>
 
