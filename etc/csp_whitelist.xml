@@ -10,6 +10,12 @@
                 <value id="visa-js-sdk" type="host">*.visa.com</value>
                 <value id="amex-js-sdk" type="host">*.aexp-static.com</value>
                 <value id="online-metrix-js-sdk" type="host">*.online-metrix.net</value>
+                <value id="payway-js-sdk" type="host">*.payway.com.au</value>
+                <value id="nuvei-js-sdk" type="host">*.safecharge.com</value>
+                <value id="skybank-js-sdk" type="host">*.skybankgateway.com</value>
+                <value id="metricsglobal-js-sdk" type="host">*.metricsglobalgateway.com</value>
+                <value id="nmi-js-sdk" type="host">*.nmi.com</value>
+                <value id="mg-satellites-js-sdk" type="host">*.transactiongateway.com</value>
             </values>
         </policy>
         <policy id="connect-src">
@@ -20,12 +26,19 @@
                 <value id="discovercard-api" type="host">*.discovercard.com</value>
                 <value id="advancedpaymentscert-api" type="host">advancedpaymentscert.com</value>
                 <value id="advancedpaymentscert-api2" type="host">*.advancedpaymentscert.com</value>
+                <value id="payway-api" type="host">*.payway.com.au</value>
+                <value id="nuvei-api" type="host">*.safecharge.com</value>
+                <value id="skybank-api" type="host">*.skybankgateway.com</value>
+                <value id="metricsglobal-api" type="host">*.metricsglobalgateway.com</value>
+                <value id="nmi-api" type="host">*.nmi.com</value>
+                <value id="mg-satellites-api" type="host">*.transactiongateway.com</value>
             </values>
         </policy>
         <policy id="style-src">
             <values>
                 <value id="payfurl-form-style" type="host">*.payfurl.com</value>
                 <value id="mastercard-style" type="host">*.mastercard.com</value>
+                <value id="google-style" type="host">*.googleapis.com</value>
             </values>
         </policy>
         <policy id="frame-src">
@@ -40,6 +53,12 @@
                 <value id="mastercard-img" type="host">*.mastercard.com</value>
                 <value id="discover-img" type="host">*.discovercard.com</value>
                 <value id="online-metrix-img" type="host">*.online-metrix.net</value>
+                <value id="google-img" type="host">*.gstatic.com</value>
+            </values>
+        </policy>
+        <policy id="font-src">
+            <values>
+                <value id="google-fonts" type="host">*.gstatic.com</value>
             </values>
         </policy>
     </policies>

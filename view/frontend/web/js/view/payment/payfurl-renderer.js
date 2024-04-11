@@ -44,6 +44,15 @@ define(
       );
     }
 
+    if (payfurlConfig.isSafari() && payfurlConfig.isApplePayEnabled() && providersInfo.hasApplePayProviders) {
+      rendererList.push(
+        {
+          type: 'payfurl_applepay',
+          component: 'Payfurl_Payment/js/view/payment/method-renderer/payfurl-applepay-method',
+        },
+      );
+    }
+
     if (providersInfo.hasBnplProviders) {
       for (const provider of providersInfo.bnplProviders) {
         let type = provider.providerType;
