@@ -61,7 +61,11 @@ class PaymentDataBuilder implements BuilderInterface
         $result = [
             self::AMOUNT => $this->formatPrice($order->getOrderGrandTotal()),
             self::CURRENCY => $order->getOrderCurrentCode(),
-            self::CAPTURE => true
+            self::CAPTURE => true,
+            'Reference' => 'Magento Order #'.$order->getOrderIncrementId(),
+            'Email' => $order->getCustomerEmail(),
+            'FirstName' => $order->getCustomerFirstname(),
+            'LastName' => $order->getCustomerLastname(),
         ];
 
         /*Token is used to charge*/
