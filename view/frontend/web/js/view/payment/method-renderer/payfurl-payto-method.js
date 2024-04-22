@@ -23,7 +23,7 @@ define(
       getFormId: function () {
         return 'payfurl-payto-form';
       },
-      initPaymentGooglePayForm: function () {
+      initPaymentPayToForm: function () {
         payfurl
           .addPayTo(
             this.getFormId(),
