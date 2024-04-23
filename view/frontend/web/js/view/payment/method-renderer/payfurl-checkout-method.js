@@ -35,7 +35,7 @@ define(
       },
       initPaymentCheckoutForm: function () {
         payfurl
-          .addBnpl(
+          .addCheckout(
             this.getFormId(),
             this.getTotal(),
             this.getCurrency(),
