@@ -1,7 +1,7 @@
 {
   "name": "payfurl/module-payment",
   "type": "magento2-module",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "license": "proprietary",
   "authors": [
     {
@@ -11,7 +11,7 @@
   ],
   "require": {
     "magento/framework": "*",
-    "payfurl/phpsdk": ">=1.9.7"
+    "payfurl/phpsdk": ">=2.0.0"
   },
   "autoload": {
     "files": [
