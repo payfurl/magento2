@@ -11,7 +11,7 @@
   ],
   "require": {
     "magento/framework": "*",
-    "payfurl/phpsdk": ">=1.9.7"
+    "payfurl/phpsdk": ">=2.0.0"
   },
   "autoload": {
     "files": [
