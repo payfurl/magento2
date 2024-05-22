@@ -176,6 +176,16 @@ class OrderAdapter implements OrderAdapterInterface
         return $this->order->getCustomerEmail();
     }
 
+    public function getCustomerFirstname()
+    {
+        return $this->order->getCustomerFirstname();
+    }
+
+    public function getCustomerLastname()
+    {
+        return $this->order->getCustomerLastname();
+    }
+
     public function getShippingAmount()
     {
         return $this->order->getShippingAmount();
