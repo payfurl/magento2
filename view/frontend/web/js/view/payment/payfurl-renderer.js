@@ -7,7 +7,7 @@ define(
   function (
     Component,
     rendererList,
-    payfurlConfig,
+    payfurlConfig
   ) {
     'use strict';
 
