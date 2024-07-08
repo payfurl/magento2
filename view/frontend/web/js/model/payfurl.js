@@ -6,6 +6,8 @@ define(
   function(pf, payfurlConfig) {
     'use strict';
 
-    return pf.init(payfurlConfig.getEnv(), payfurlConfig.getPublicKey(), payfurlConfig.isDebug());
+    return pf
+      .init(payfurlConfig.getEnv(), payfurlConfig.getPublicKey(), payfurlConfig.isDebug())
+      .preloadClickToPay();
   },
 );

@@ -2,12 +2,12 @@ define(
   [
     'uiComponent',
     'Magento_Checkout/js/model/payment/renderer-list',
-    'Payfurl_Payment/js/model/payfurl-configuration',
+    'Payfurl_Payment/js/model/payfurl-configuration'
   ],
   function (
     Component,
     rendererList,
-    payfurlConfig
+    payfurlConfig,
   ) {
     'use strict';
 
