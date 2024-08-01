@@ -5,8 +5,8 @@
            class="radio"
            data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
     <label data-bind="attr: {'for': getCode()}" class="label">
-      <img class="payment-icon" width="50"
-           data-bind="attr: {'src': require.toUrl('Payfurl_Payment/images/card.svg') , 'alt': getTitle()}"/>
+      <img class="payment-icon" style="height:25px"
+           data-bind="attr: {'src': require.toUrl('Payfurl_Payment/images/cards.svg') , 'alt': getTitle()}"/>
       <span data-bind="text: getTitle()"></span>
     </label>
   </div>
