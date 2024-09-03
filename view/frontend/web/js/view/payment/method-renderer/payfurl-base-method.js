@@ -47,6 +47,7 @@ define(
         quote.billingAddress.subscribe(function () {
           self.setBillingAddress(quote.billingAddress());
         });
+        this.subscribeForGuestEmail();
 
         payfurl.onSuccess(function (response) {
           const payfurlToken = response.token || '';
@@ -114,6 +115,34 @@ define(
           })
 
         return this;
+      },
+      setCustomerEmail: function(email) {
+        const billingAddress = quote.billingAddress();
+        let phone = billingAddress?.telephone?.replace(/^0/, '+61') || "";
+        if (phone && !phone.match(/^\+/)) {
+          phone = '+61' + phone;
+        }
+        payfurl
+          .setCustomerInfo({
+            firstName: billingAddress?.firstname,
+            lastName: billingAddress?.lastname,
+            email,
+            phoneNumber: phone,
+          });
+      },
+      subscribeForGuestEmail: function () {
+        if (window.checkoutConfig.customerData?.email) return;
+        let email = quote.guestEmail;
+        const subscribeForGuestEmailHandler = setInterval(() => {
+          // If customer is logged in, we don't need to subscribe for guest email
+          if (window.checkoutConfig.customerData?.email) {
+            clearInterval(subscribeForGuestEmailHandler);
+          }
+          // check if email is changed
+          if (email === quote.guestEmail) return;
+          email = quote.guestEmail;
+          this.setCustomerEmail(quote.guestEmail);
+        }, 500);
       },
       getSavedPaymentMethods: function () {
         let savedPayments = payfurlConfig.getSavedPaymentMethods();
