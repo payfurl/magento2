@@ -58,11 +58,13 @@ class PaymentDataBuilder implements BuilderInterface
 
         $payment = $paymentDO->getPayment();
 
+        $orderId = $order->getOrderIncrementId();
+
         $result = [
             self::AMOUNT => $this->formatPrice($order->getOrderGrandTotal()),
             self::CURRENCY => $order->getOrderCurrentCode(),
             self::CAPTURE => true,
-            'Reference' => 'Order #'.$order->getOrderIncrementId(),
+            'Reference' => 'Order #'.$orderId,
             'Email' => $order->getCustomerEmail(),
             'FirstName' => $order->getCustomerFirstname(),
             'LastName' => $order->getCustomerLastname(),
@@ -83,6 +85,37 @@ class PaymentDataBuilder implements BuilderInterface
         }
 
         $result["payfurlSaveMyPayment"] = (bool)$payment->getAdditionalInformation('payfurlSaveMyPayment');
+
+        $billingAddress = $order->getBillingAddress();
+        if ($billingAddress) {
+            $result['Address'] = [
+                'Line1' => $billingAddress->getStreetLine1(),
+                'City' => $billingAddress->getCity(),
+                'Country' => $billingAddress->getCountryId(),
+                'PostalCode' => $billingAddress->getPostcode(),
+                'State' => $billingAddress->getRegionCode(),
+            ];
+        }
+
+        $result['Order'] = [
+            'OrderNumber' => $orderId,
+            'FreightAmount' => $order->getShippingAmount(),
+            'Items' => [],
+        ];
+        foreach ($order->getItems() as $item) {
+            // magento bug???
+            if (!$item->getPrice() || !$item->getQtyOrdered()) {
+                continue;
+            }
+
+            $result['Order']['Items'][] = [
+                'ProductCode' => $item->getSku(),
+                'Description' => $item->getName(),
+                'Quantity' => $item->getQtyOrdered(),
+                'Amount' => $item->getPrice(),
+                'TaxAmount' => $item->getTaxAmount(),
+            ];
+        }
 
         return $result;
     }
