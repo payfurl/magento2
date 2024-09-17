@@ -73,13 +73,7 @@ class OrderAdapter implements OrderAdapterInterface
      */
     public function getBillingAddress()
     {
-        if ($this->order->getBillingAddress()) {
-            return $this->addressAdapterFactory->create(
-                ['address' => $this->order->getBillingAddress()]
-            );
-        }
-
-        return null;
+        return $this->order->getBillingAddress();
     }
 
     /**
@@ -89,13 +83,7 @@ class OrderAdapter implements OrderAdapterInterface
      */
     public function getShippingAddress()
     {
-        if ($this->order->getShippingAddress()) {
-            return $this->addressAdapterFactory->create(
-                ['address' => $this->order->getShippingAddress()]
-            );
-        }
-
-        return null;
+        return $this->order->getShippingAddress();
     }
 
     /**
