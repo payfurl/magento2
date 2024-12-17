@@ -66,6 +66,7 @@ class PaymentDataBuilder implements BuilderInterface
             self::CAPTURE => true,
             'Reference' => 'Order #'.$orderId,
             'Email' => $order->getCustomerEmail(),
+            'Phone' => $order->getBillingAddress()->getTelephone(),
             'FirstName' => $order->getCustomerFirstname(),
             'LastName' => $order->getCustomerLastname(),
         ];
@@ -88,8 +89,9 @@ class PaymentDataBuilder implements BuilderInterface
 
         $billingAddress = $order->getBillingAddress();
         if ($billingAddress) {
+            $street = $billingAddress->getStreet();
             $result['Address'] = [
-                'Line1' => $billingAddress->getStreetLine1(),
+                'Line1' => $street[0],
                 'City' => $billingAddress->getCity(),
                 'Country' => $billingAddress->getCountryId(),
                 'PostalCode' => $billingAddress->getPostcode(),

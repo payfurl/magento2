@@ -289,7 +289,6 @@
             <argument name="builders" xsi:type="array">
                 <item name="customer" xsi:type="string">Payfurl\Payment\Gateway\Request\CustomerDataBuilder</item>
                 <item name="payment" xsi:type="string">Payfurl\Payment\Gateway\Request\PaymentDataBuilder</item>
-                <item name="address" xsi:type="string">Payfurl\Payment\Gateway\Request\AddressDataBuilder</item>
                 <item name="order" xsi:type="string">Payfurl\Payment\Gateway\Request\OrderDataBuilder</item>
             </argument>
         </arguments>
