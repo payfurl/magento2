@@ -6,11 +6,13 @@ define(
     'Magento_Checkout/js/model/quote',
     'Payfurl_Payment/js/model/payfurl',
     'Payfurl_Payment/js/model/payfurl-configuration',
+    'Magento_Checkout/js/model/payment/additional-validators',
   ],
-  function (ko, $, Component, quote, payfurl, payfurlConfig) {
+  function (ko, $, Component, quote, payfurl, payfurlConfig, additionalValidators) {
     'use strict';
 
     window._quote = quote;
+    window._component = Component;
 
     return Component.extend({
       self: this,
@@ -65,6 +67,8 @@ define(
         payfurl.onFailure(function (errorMessage) {
           self.isPlaceOrderActionAllowed(false);
         });
+        payfurl.onValidate(additionalValidators.validate.bind(additionalValidators));
+
 
         this.setBillingAddress(quote.billingAddress());
         this.setOrderInfo(quote.getTotals()(), quote.getItems());
