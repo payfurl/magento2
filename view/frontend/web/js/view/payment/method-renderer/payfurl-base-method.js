@@ -104,14 +104,14 @@ define(
           .setOrderInfo({
             orderItems: items?.map(p => ({
               name: p.name,
-              quantity: p.qty,
+              quantity: Number(p.qty),
               sku: p.sku,
-              unitPrice: p.price,
-              totalAmount: p.price * p.qty,
+              unitPrice: Number(p.price),
+              totalAmount: Number(p.price) * Number(p.qty),
             })),
-            taxAmount: quoteTotal?.tax_amount,
-            shippingAmount: quoteTotal?.shipping_amount,
-            discountAmount: quoteTotal?.discount_amount,
+            taxAmount: Number(quoteTotal?.tax_amount),
+            shippingAmount: Number(quoteTotal?.shipping_amount),
+            discountAmount: Math.abs(Number(quoteTotal?.discount_amount)),
           })
 
         return this;
