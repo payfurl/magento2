@@ -9,7 +9,4 @@ let config = {
       'payfurljs': 'https://assets.payfurl.com/v4.6.22/js/payfurl.js',
     },
   },
-  paths: {
-    'Magento_Checkout/js/view/shipping': 'Payfurl_Payment/js/view/shipping',
-  },
 };
