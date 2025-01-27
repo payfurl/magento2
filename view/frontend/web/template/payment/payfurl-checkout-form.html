@@ -19,7 +19,7 @@
       <!--/ko-->
     </div>
 
-    <form class="form"  action="/" method="post">
+    <form data-bind="attr: {'id': getCode() + '_form'}" class="form"  action="/" method="post">
       <div data-bind="attr: {'id': getFormId()}, afterRender: initPaymentCheckoutForm()"></div>
       <div class="checkout-agreements-block">
         <!-- ko foreach: $parent.getRegion('before-place-order') -->
