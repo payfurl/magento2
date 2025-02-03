@@ -73,7 +73,7 @@
     </div>
     <!-- /ko -->
 
-    <form class="form" action="#" method="post" data-bind="visible: checkCard() == 'new'">
+    <form id="payfurl_card_form" class="form" action="#" method="post" data-bind="visible: checkCard() == 'new'">
       <div id="payfurl-card-form" data-bind="afterRender: initPaymentCardForm()"></div>
       <div class="checkout-agreements-block">
         <!-- ko foreach: $parent.getRegion('before-place-order') -->

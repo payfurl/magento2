@@ -13,6 +13,7 @@ define(
 
     window._quote = quote;
     window._component = Component;
+    window._additionalValidators = additionalValidators;
 
     return Component.extend({
       self: this,
@@ -67,7 +68,11 @@ define(
         payfurl.onFailure(function (errorMessage) {
           self.isPlaceOrderActionAllowed(false);
         });
-        payfurl.onValidate(additionalValidators.validate.bind(additionalValidators));
+        payfurl.onValidate(() => {
+          const paymentMethod = quote.getPaymentMethod()();
+          const form = document.getElementById(`${paymentMethod?.method}_form`);
+          return form?.checkValidity() && additionalValidators.validate();
+        });
 
 
         this.setBillingAddress(quote.billingAddress());
