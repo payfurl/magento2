@@ -59,6 +59,8 @@ class PaymentDataBuilder implements BuilderInterface
         $payment = $paymentDO->getPayment();
 
         $orderId = $order->getOrderIncrementId();
+        $billingAddress = $order->getBillingAddress();
+        $phone = $billingAddress ? preg_replace('/[^0-9+]/', '', $billingAddress->getTelephone()) : '';
 
         $result = [
             self::AMOUNT => $this->formatPrice($order->getOrderGrandTotal()),
@@ -66,7 +68,7 @@ class PaymentDataBuilder implements BuilderInterface
             self::CAPTURE => true,
             'Reference' => 'Order #'.$orderId,
             'Email' => $order->getCustomerEmail(),
-            'Phone' => $order->getBillingAddress()->getTelephone(),
+            'Phone' => $phone,
             'FirstName' => $order->getCustomerFirstname(),
             'LastName' => $order->getCustomerLastname(),
         ];
