@@ -41,26 +41,6 @@
                         value: paymentMethodId">
         </option>
       </select>
-
-      <div class="checkout-agreements-block" style="margin-top: 20px">
-        <!-- ko foreach: $parent.getRegion('before-place-order') -->
-        <!-- ko template: getTemplate() --><!-- /ko -->
-        <!--/ko-->
-      </div>
-      <div class="actions-toolbar">
-        <div class="primary">
-          <button class="action primary checkout"
-                  data-bind="
-                            click: placeOrderWithSavedCard,
-                            attr: {title: $t('Place Order')},
-                            enable: (getCode() == isChecked()),
-                            css: {disabled: !isPlaceOrderActionAllowed()}
-                            "
-                  disabled>
-            <span data-bind="i18n: 'Place Order'"></span>
-          </button>
-        </div>
-      </div>
     </div>
     <!-- /ko -->
 
@@ -81,31 +61,32 @@
 
     <form id="payfurl_card_form" class="form" action="#" method="post" data-bind="visible: checkCard() == 'new'">
       <div id="payfurl-card-form" data-bind="afterRender: initPaymentCardForm()"></div>
-      <div class="checkout-agreements-block">
-        <!-- ko foreach: $parent.getRegion('before-place-order') -->
-        <!-- ko template: getTemplate() --><!-- /ko -->
-        <!--/ko-->
-      </div>
-
       <div class="actions-toolbar">
         <input type="checkbox" id="save_my_payment_method" value="save"/>
         <label for="save_my_payment_method" class="label">
           <span>Save my payment method</span>
         </label>
-        <div class="primary">
-          <button data-role="review-save"
-                  type="submit"
-                  data-bind="
+      </div>
+    </form>
+
+    <div class="checkout-agreements-block" style="margin-top: 20px">
+      <!-- ko foreach: $parent.getRegion('before-place-order') -->
+      <!-- ko template: getTemplate() --><!-- /ko -->
+      <!--/ko-->
+    </div>
+    <div class="actions-toolbar">
+      <div class="primary">
+        <button class="action primary checkout"
+                data-bind="
+                            click: placeOrderWithSavedCard,
                             attr: {title: $t('Place Order')},
                             enable: (getCode() == isChecked()),
                             css: {disabled: !isPlaceOrderActionAllowed()}
                             "
-                  class="action primary checkout"
-                  disabled>
-            <span data-bind="i18n: 'Place Order'"></span>
-          </button>
-        </div>
+                disabled>
+          <span data-bind="i18n: 'Place Order'"></span>
+        </button>
       </div>
-    </form>
+    </div>
   </div>
 </div>
