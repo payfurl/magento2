@@ -149,6 +149,21 @@ define(
 
         return savedPayments;
       },
+      /**
+       * Place Order: pays with the selected saved card, or submits the card form. The SDK listens for that
+       * submit, tokenises the card in its iframe, and its onSuccess (wireOnce) places the order with the token.
+       */
+      placeOrderClick: function () {
+        if (this.checkCard() === 'saved' && this.getSavedPaymentMethods()) {
+          return this.placeOrderWithSavedCard();
+        }
+        if (!this.validate() || !additionalValidators.validate()) {
+          return this;
+        }
+        document.getElementById('payfurl_card_form')?.requestSubmit();
+
+        return this;
+      },
       placeOrderWithSavedCard: function () {
         payfurlConfig.setToken('');
         payfurlConfig.setChargeId('');

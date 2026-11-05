@@ -72,12 +72,11 @@
       <!-- ko template: getTemplate() --><!-- /ko -->
       <!--/ko-->
     </div>
-    <!-- A new card is paid from the card form's own button; this one pays with the selected saved card. -->
-    <div class="actions-toolbar" data-bind="visible: checkCard() == 'saved'">
+    <div class="actions-toolbar">
       <div class="primary">
         <button class="action primary checkout"
                 data-bind="
-                            click: placeOrderWithSavedCard,
+                            click: placeOrderClick,
                             attr: {title: $t('Place Order')},
                             enable: (getCode() == isChecked()),
                             css: {disabled: !isPlaceOrderActionAllowed()}
