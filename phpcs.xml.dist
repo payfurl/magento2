@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<ruleset name="payfurl-magento2">
+    <description>Magento coding standard (Marketplace technical review)</description>
+    <file>.</file>
+    <exclude-pattern>/vendor/</exclude-pattern>
+    <exclude-pattern>/e2e/</exclude-pattern>
+    <exclude-pattern>/docker/</exclude-pattern>
+    <exclude-pattern>/.idea/</exclude-pattern>
+    <arg name="extensions" value="php,phtml,xml,js,html"/>
+    <arg value="sp"/>
+    <rule ref="Magento2"/>
+</ruleset>

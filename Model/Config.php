@@ -7,27 +7,27 @@ use Magento\Store\Model\ScopeInterface;
 
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
-    const ACTIVE = 'active';
-    const DEBUG = 'debug';
-    const ENV = 'env';
-    const ENABLE_GOOGLEPAY = 'enable_googlepay';
-    const ENABLE_APPLEPAY = 'enable_applepay';
+    public const ACTIVE = 'active';
+    public const DEBUG = 'debug';
+    public const ENV = 'env';
+    public const ENABLE_GOOGLEPAY = 'enable_googlepay';
+    public const ENABLE_APPLEPAY = 'enable_applepay';
 
-    const ENV_SANDBOX = 'sandbox';
+    public const ENV_SANDBOX = 'sandbox';
 
-    const ENV_LIVE = 'production';
-    const SANDBOX_PUBLIC_KEY = 'sandbox_public_key';
+    public const ENV_LIVE = 'production';
+    public const SANDBOX_PUBLIC_KEY = 'sandbox_public_key';
 
-    const SANDBOX_SECRET_KEY = 'sandbox_secret_key';
-    const LIVE_PUBLIC_KEY = 'public_key';
+    public const SANDBOX_SECRET_KEY = 'sandbox_secret_key';
+    public const LIVE_PUBLIC_KEY = 'public_key';
 
-    const LIVE_SECRET_KEY = 'secret_key';
+    public const LIVE_SECRET_KEY = 'secret_key';
 
-    const TITLE = 'title';
+    public const TITLE = 'title';
 
-    const WEBHOOK_SIGNING_KEY = 'webhook_signing_key';
+    public const WEBHOOK_SIGNING_KEY = 'webhook_signing_key';
 
-    const CAN_GET_SAVED_PAYMENTS = 'can_get_saved_payments';
+    public const CAN_GET_SAVED_PAYMENTS = 'can_get_saved_payments';
 
     protected $scopeConfig;
     protected $storeId;

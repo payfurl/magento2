@@ -11,9 +11,6 @@ use Payfurl\Payment\Gateway\Validator\ChargeResponseValidator;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 
-/**
- * Class PaymentDataHandler
- */
 class PaymentDataHandler extends AdditionalDataHandler
 {
     /**
@@ -43,6 +40,5 @@ class PaymentDataHandler extends AdditionalDataHandler
                 $payment->setAdditionalInformation($key, $value);
             }
         }
-
     }
 }

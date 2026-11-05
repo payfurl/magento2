@@ -8,9 +8,6 @@ namespace Payfurl\Payment\Gateway;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Helper;
 
-/**
- * Class SubjectReader
- */
 class SubjectReader
 {
     /**

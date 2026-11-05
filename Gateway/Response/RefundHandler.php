@@ -12,10 +12,10 @@ use Magento\Sales\Model\Order\Payment;
 class RefundHandler extends TransactionDataHandler
 {
        /**
-     * @param Payment $orderPayment
-     * @param $transaction
-     * @return void
-     */
+        * @param Payment $orderPayment
+        * @param $transaction
+        * @return void
+        */
     protected function setTransactionId(Payment $orderPayment, $transaction)
     {
         $orderPayment->setTransactionId($transaction["chargeId"]."-".time()."-Refund");

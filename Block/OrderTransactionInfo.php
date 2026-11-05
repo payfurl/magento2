@@ -14,46 +14,46 @@ use Magento\Framework\Phrase;
  */
 class OrderTransactionInfo extends \Magento\Payment\Block\Info
 {
-    const PAYFURL_TYPE = "payfurlType";
-    const CARD_TYPE = "CARD";
+    public const PAYFURL_TYPE = "payfurlType";
+    public const CARD_TYPE = "CARD";
 
-    const CUSTOMER_EMAIL = "customerEmail";
+    public const CUSTOMER_EMAIL = "customerEmail";
 
-    const CARD_NUMBER = 'cardNumber';
+    public const CARD_NUMBER = 'cardNumber';
 
-    const CARD_HOLDER = 'cardHolder';
+    public const CARD_HOLDER = 'cardHolder';
 
-    const CC_TYPE = "type";
+    public const CC_TYPE = "type";
 
-    const TRANSACTION_TYPE = "Transaction Type";
+    public const TRANSACTION_TYPE = "Transaction Type";
 
-    const STATUS = "status";
-    const DATE_ADDED = "dateAdded";
+    public const STATUS = "status";
+    public const DATE_ADDED = "dateAdded";
 
-    const CURRENCY = "currency";
-    const PROVIDER_NAME = "providerName";
+    public const CURRENCY = "currency";
+    public const PROVIDER_NAME = "providerName";
 
-    const TRANSACTION_PAYPAL_EMAIL_LABEL = "Email";
+    public const TRANSACTION_PAYPAL_EMAIL_LABEL = "Email";
 
-    const TRANSACTION_CARD_NUMBER_LABEL = 'Credit Card Number';
+    public const TRANSACTION_CARD_NUMBER_LABEL = 'Credit Card Number';
 
-    const TRANSACTION_CARD_HOLDER = 'Card Holder';
+    public const TRANSACTION_CARD_HOLDER = 'Card Holder';
 
-    const TRANSACTION_CC_TYPE_LABEL = "Credit Card Type";
+    public const TRANSACTION_CC_TYPE_LABEL = "Credit Card Type";
 
-    const STATUS_LABEL = "Status";
-    const DATE_ADDED_LABEL = "Date Added";
+    public const STATUS_LABEL = "Status";
+    public const DATE_ADDED_LABEL = "Date Added";
 
-    const CURRENCY_LABEL = "Currency";
-    const PROVIDER_NAME_LABEL = "Provider Name";
+    public const CURRENCY_LABEL = "Currency";
+    public const PROVIDER_NAME_LABEL = "Provider Name";
 
     protected $timezone;
 
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
-        array $data = [])
-    {
+        array $data = []
+    ) {
         parent::__construct($context, $data);
         $this->timezone = $timezone;
     }
@@ -147,8 +147,8 @@ class OrderTransactionInfo extends \Magento\Payment\Block\Info
      */
     protected function setDataToTransfer(
         \Magento\Framework\DataObject $transport,
-                                      $field,
-                                      $value
+        $field,
+        $value
     ) {
         $transport->setData(
             (string)$this->getLabel($field),

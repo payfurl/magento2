@@ -15,38 +15,38 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  */
 class AdditionalDataHandler implements HandlerInterface
 {
-    const PAYFURL_TYPE = "payfurlType";
-    const CARD_TYPE = "CARD";
+    public const PAYFURL_TYPE = "payfurlType";
+    public const CARD_TYPE = "CARD";
 
-    const CUSTOMER_EMAIL = "customerEmail";
+    public const CUSTOMER_EMAIL = "customerEmail";
 
-    const CARD_NUMBER = 'cardNumber';
+    public const CARD_NUMBER = 'cardNumber';
 
-    const CARD_HOLDER = 'cardHolder';
+    public const CARD_HOLDER = 'cardHolder';
 
-    const EXPIRY_DATE = 'expiryDate';
+    public const EXPIRY_DATE = 'expiryDate';
 
-    const CC_TYPE = "type";
-    const STATUS = "status";
-    const DATE_ADDED = "dateAdded";
-    const CURRENCY = "currency";
-    const PROVIDER_NAME = "providerName";
+    public const CC_TYPE = "type";
+    public const STATUS = "status";
+    public const DATE_ADDED = "dateAdded";
+    public const CURRENCY = "currency";
+    public const PROVIDER_NAME = "providerName";
 
-    const TRANSACTION = "transaction";
+    public const TRANSACTION = "transaction";
 
-    const REFUND_TRANSACTION = "refund";
+    public const REFUND_TRANSACTION = "refund";
 
-    const CHARGE_ID = "chargeId";
-    const PROVIDER_CHARGE_ID = "providerChargeId";
-    const AMOUNT = "amount";
-    const PROVIDER_ID = "providerId";
-    const REFERENCE = "reference";
-    const SUCCESS_DATE = "successDate";
-    const VOID_DATE = "voidDate";
+    public const CHARGE_ID = "chargeId";
+    public const PROVIDER_CHARGE_ID = "providerChargeId";
+    public const AMOUNT = "amount";
+    public const PROVIDER_ID = "providerId";
+    public const REFERENCE = "reference";
+    public const SUCCESS_DATE = "successDate";
+    public const VOID_DATE = "voidDate";
 
-    const REFUND_AMOUNT = "refundAmount";
-    const REFUND_DATE = "refundDateAdded";
-    const REFUND_COMMENT = "refundComment";
+    public const REFUND_AMOUNT = "refundAmount";
+    public const REFUND_DATE = "refundDateAdded";
+    public const REFUND_COMMENT = "refundComment";
 
     /**
      * @var SubjectReader

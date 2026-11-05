@@ -20,16 +20,16 @@ class PaymentDataBuilder implements BuilderInterface
      * The billing amount of the request. This value must be greater than 0,
      * and must match the currency format of the merchant account.
      */
-    const AMOUNT = 'Amount';
+    public const AMOUNT = 'Amount';
 
-    const CURRENCY = 'Currency';
+    public const CURRENCY = 'Currency';
 
-    const REFERENCE = "Reference";
+    public const REFERENCE = "Reference";
 
-    const CAPTURE = "Capture";
+    public const CAPTURE = "Capture";
 
     /** Read by AbstractTransaction to pick the store's keys; never sent to payFURL. */
-    const STORE_ID = 'StoreId';
+    public const STORE_ID = 'StoreId';
 
     /**
      * @var SubjectReader

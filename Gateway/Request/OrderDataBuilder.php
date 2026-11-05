@@ -18,14 +18,14 @@ class OrderDataBuilder implements BuilderInterface
 {
     use Formatter;
 
-    const INDEX = "Order";
-    const ORDER_NUMBER = 'OrderNumber';
+    public const INDEX = "Order";
+    public const ORDER_NUMBER = 'OrderNumber';
 
-    const FREIGHT_AMOUNT = 'FreightAmount';
+    public const FREIGHT_AMOUNT = 'FreightAmount';
 
-    const DUTY_AMOUNT = "DutyAmount";
+    public const DUTY_AMOUNT = "DutyAmount";
 
-    const ITEMS = "Items";
+    public const ITEMS = "Items";
 
     /**
      * @var SubjectReader

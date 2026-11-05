@@ -7,10 +7,6 @@ namespace Payfurl\Payment\Model\Adapter;
 
 use payFURL\Sdk as PayFurlSDK;
 
-/**
- * Class PayfurlAdapter
- * @codeCoverageIgnore
- */
 class PayfurlAdapter
 {
     /**

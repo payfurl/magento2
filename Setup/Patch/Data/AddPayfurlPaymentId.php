@@ -102,6 +102,8 @@ class AddPayfurlPaymentId implements DataPatchInterface
 
         // End setup
         $this->moduleDataSetup->getConnection()->endSetup();
+
+        return $this;
     }
 
     /**

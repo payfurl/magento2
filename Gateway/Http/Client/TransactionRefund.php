@@ -8,9 +8,6 @@ namespace Payfurl\Payment\Gateway\Http\Client;
 use Magento\Framework\Exception\LocalizedException;
 use Payfurl\Payment\Model\Adapter\PayfurlAdapter;
 
-/**
- * Class TransactionRefund
- */
 class TransactionRefund extends AbstractTransaction
 {
     /**
