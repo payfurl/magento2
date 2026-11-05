@@ -1,0 +1,75 @@
+# A new browser SDK in production opens a PR that pins it. A new @payfurl/client on npm is the signal: only the
+# platform's master `deploy sdk` publishes it, while sandbox uploads /vX.Y.Z/ to the asset bucket earlier, so an
+# asset URL existing is not one. The PR bumps the pinned assets.payfurl.com URL and the patch version and adds a
+# changelog entry. Its body asks for the e2e run in payfurl/platform before merging.
+#
+# A PR opened with the default GITHUB_TOKEN does not start other workflows, so CI would not run on it: set the
+# SDK_BUMP_TOKEN secret (a fine-grained token with contents and pull-requests write on this repository) for that.
+name: SDK bump
+
+on:
+  schedule:
+    - cron: '0 22 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.SDK_BUMP_TOKEN || github.token }}
+
+      - name: Compare the pinned SDK with npm
+        id: sdk
+        env:
+          GH_TOKEN: ${{ secrets.SDK_BUMP_TOKEN || github.token }}
+        run: |
+          latest=$(npm view @payfurl/client version)
+          if ! [[ "$latest" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::unexpected npm version '$latest'"
+            exit 1
+          fi
+          pinned=$(sed -nE 's#.*assets\.payfurl\.com/v([0-9.]+)/js/payfurl\.js.*#\1#p' view/frontend/requirejs-config.js)
+          echo "pinned v$pinned, npm v$latest"
+          branch="sdk-bump/v$latest"
+          if [ "$latest" = "$pinned" ] || git ls-remote --exit-code --heads origin "$branch" >/dev/null; then
+            echo "nothing to do"
+            exit 0
+          fi
+          curl -fsSI "https://assets.payfurl.com/v$latest/js/payfurl.js" >/dev/null
+          { echo "latest=$latest"; echo "pinned=$pinned"; echo "branch=$branch"; } >> "$GITHUB_OUTPUT"
+
+      - name: Open the PR
+        if: steps.sdk.outputs.latest
+        env:
+          GH_TOKEN: ${{ secrets.SDK_BUMP_TOKEN || github.token }}
+          LATEST: ${{ steps.sdk.outputs.latest }}
+          PINNED: ${{ steps.sdk.outputs.pinned }}
+          BRANCH: ${{ steps.sdk.outputs.branch }}
+        run: |
+          sed -i "s#assets.payfurl.com/v$PINNED/js/payfurl.js#assets.payfurl.com/v$LATEST/js/payfurl.js#" \
+            view/frontend/requirejs-config.js
+          current=$(jq -r .version composer.json)
+          next=$(echo "$current" | awk -F. '{ printf "%d.%d.%d", $1, $2, $3 + 1 }')
+          sed -i "s/\"version\": \"$current\"/\"version\": \"$next\"/" composer.json
+
+          # A new section under "## [Unreleased]", and its compare link.
+          entry="## [$next] - $(date -u +%F)\n\n### Changed\n\n- Browser SDK updated from v$PINNED to v$LATEST\n  ([SDK changelog](https://docs.payfurl.com/client_sdk/changelog)).\n"
+          awk -v entry="$entry" '{ print } /^## \[Unreleased\]/ { printf "\n%s", entry }' CHANGELOG.md > CHANGELOG.tmp
+          sed -i -E "s#^\[Unreleased\]: (.*)/compare/v[0-9.]+\.\.\.HEAD#[Unreleased]: \1/compare/v$next...HEAD\n[$next]: \1/compare/v$current...v$next#" CHANGELOG.tmp
+          mv CHANGELOG.tmp CHANGELOG.md
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -c "$BRANCH"
+          git commit -am "Browser SDK v$LATEST (module $next)"
+          git push origin "$BRANCH"
+          gh pr create --base main --head "$BRANCH" --title "Browser SDK v$LATEST (module $next)" --body \
+            "Pins the browser SDK released to production as @payfurl/client v$LATEST ([changelog](https://docs.payfurl.com/client_sdk/changelog)) and bumps the module to $next.
+
+          Before merging, run the e2e suite against this branch from a payfurl/platform checkout: \`MAGENTO_PLUGIN_DIR=<this checkout> just e2e magento\`. After merging, tag \`v$next\` to release it."
