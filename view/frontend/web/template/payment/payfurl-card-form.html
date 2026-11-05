@@ -74,7 +74,8 @@
       <!-- ko template: getTemplate() --><!-- /ko -->
       <!--/ko-->
     </div>
-    <div class="actions-toolbar">
+    <!-- A new card is paid from the card form's own button; this one pays with the selected saved card. -->
+    <div class="actions-toolbar" data-bind="visible: checkCard() == 'saved'">
       <div class="primary">
         <button class="action primary checkout"
                 data-bind="

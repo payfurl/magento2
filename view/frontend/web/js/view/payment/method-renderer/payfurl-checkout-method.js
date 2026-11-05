@@ -10,7 +10,6 @@ define(
   function (ko, $, PayfurlBaseMethod, quote, payfurl, payfurlConfig) {
     'use strict';
 
-    window._quote = quote;
     return PayfurlBaseMethod.extend({
       self: this,
       defaults: {

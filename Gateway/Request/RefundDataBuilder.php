@@ -75,7 +75,8 @@ class RefundDataBuilder implements BuilderInterface
 
         return [
             'ChargeId' => $txnId,
-            PaymentDataBuilder::AMOUNT => $amount
+            PaymentDataBuilder::AMOUNT => $amount,
+            PaymentDataBuilder::STORE_ID => $paymentDO->getOrder()->getStoreId(),
         ];
     }
 }

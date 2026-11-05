@@ -11,7 +11,6 @@ define(
   ) {
     'use strict';
 
-    window._checkoutConfig = window.checkoutConfig.payment;
     const providersInfo = window.checkoutConfig.payment?.payfurl?.providersInfo;
     if (!providersInfo) {
       return Component.extend({});
@@ -53,9 +52,15 @@ define(
       );
     }
 
+    // Only providers with a payment method in etc/config.xml: Magento rejects an order placed with any other code.
+    const checkoutProviderTypes = ['azupay', 'shift', 'pay_by_account', 'upi'];
+
     if (providersInfo.hasBnplProviders) {
       for (const provider of providersInfo.bnplProviders) {
         let type = provider.providerType;
+        if (!checkoutProviderTypes.includes(type)) {
+          continue;
+        }
         rendererList.push(
           {
             type: `payfurl_checkout_${type}`,

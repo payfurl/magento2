@@ -58,6 +58,11 @@
                     <label>Debug</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="webhook_signing_key" translate="label comment" sortOrder="45" type="obscure" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Webhook signing key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <comment><![CDATA[Settles PayID, PayTo and other payments that are still pending when the order is placed. In the payFURL portal, add a Transaction webhook on <strong>Webhooks</strong> pointing at <code>https://&lt;your store&gt;/payfurl/webhook</code>, then paste the <strong>Webhook Secret Key</strong> from <strong>Account Info</strong> here. Without it, use <strong>Get Payment Update</strong> on orders in Payment Review.]]></comment>
+                </field>
                 <field id="key_validation" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label></label>
                     <comment><![CDATA[After making any changes to Public Key or Secret key, please Save Config first before validating credentials.]]></comment>

@@ -3,6 +3,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <payment>
+            <!-- Shared settings (Model/Config.php reads payment/payfurl/*) -->
+            <payfurl>
+                <webhook_signing_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <!-- Masked in var/log/payfurl.log (Magento\Payment\Model\Method\Logger, any depth, any case) -->
+                <debugReplaceKeys>Email,Phone,FirstName,LastName,Address,Token,PaymentMethodId,customerPayfurlId,cardholder,cardNumber,expiryDate,billingAddress,shippingAddress,phone,email</debugReplaceKeys>
+            </payfurl>
             <payfurl_card>
                 <payment_action>authorize_capture</payment_action><!-- You can use another methor like capture  -->
                 <model>PayfurlCardFacade</model>
@@ -10,6 +16,8 @@
                 <can_capture>1</can_capture>
                 <can_refund>1</can_refund>
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_fetch_transaction_info>1</can_fetch_transaction_info>
+                <can_fetch_transaction_information>1</can_fetch_transaction_information>
                 <can_get_saved_payments>1</can_get_saved_payments>
                 <active>1</active>
                 <title>Card Payment</title>
@@ -27,6 +35,8 @@
                 <can_capture>1</can_capture>
                 <can_refund>1</can_refund>
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_fetch_transaction_info>1</can_fetch_transaction_info>
+                <can_fetch_transaction_information>1</can_fetch_transaction_information>
                 <can_get_saved_payments>1</can_get_saved_payments>
                 <active>1</active>
                 <title>Paypal</title>
@@ -44,6 +54,8 @@
                 <can_capture>1</can_capture>
                 <can_refund>1</can_refund>
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_fetch_transaction_info>1</can_fetch_transaction_info>
+                <can_fetch_transaction_information>1</can_fetch_transaction_information>
                 <can_get_saved_payments>1</can_get_saved_payments>
                 <active>1</active>
                 <title>GooglePay</title>
@@ -61,6 +73,8 @@
                 <can_capture>1</can_capture>
                 <can_refund>1</can_refund>
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_fetch_transaction_info>1</can_fetch_transaction_info>
+                <can_fetch_transaction_information>1</can_fetch_transaction_information>
                 <can_get_saved_payments>1</can_get_saved_payments>
                 <active>1</active>
                 <title>ApplePay</title>
@@ -78,6 +92,8 @@
                 <can_capture>1</can_capture>
                 <can_refund>1</can_refund>
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_fetch_transaction_info>1</can_fetch_transaction_info>
+                <can_fetch_transaction_information>1</can_fetch_transaction_information>
                 <can_get_saved_payments>1</can_get_saved_payments>
                 <active>1</active>
                 <title>PayID</title>
@@ -95,6 +111,8 @@
                 <can_capture>1</can_capture>
                 <can_refund>1</can_refund>
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_fetch_transaction_info>1</can_fetch_transaction_info>
+                <can_fetch_transaction_information>1</can_fetch_transaction_information>
                 <can_get_saved_payments>1</can_get_saved_payments>
                 <active>1</active>
                 <title>PayTo</title>
@@ -112,6 +130,8 @@
                 <can_capture>1</can_capture>
                 <can_refund>1</can_refund>
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_fetch_transaction_info>1</can_fetch_transaction_info>
+                <can_fetch_transaction_information>1</can_fetch_transaction_information>
                 <can_get_saved_payments>1</can_get_saved_payments>
                 <active>1</active>
                 <title>Shift</title>
@@ -129,6 +149,8 @@
                 <can_capture>1</can_capture>
                 <can_refund>1</can_refund>
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_fetch_transaction_info>1</can_fetch_transaction_info>
+                <can_fetch_transaction_information>1</can_fetch_transaction_information>
                 <can_get_saved_payments>1</can_get_saved_payments>
                 <active>1</active>
                 <title>Pay By Account</title>
@@ -146,6 +168,8 @@
                 <can_capture>1</can_capture>
                 <can_refund>1</can_refund>
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_fetch_transaction_info>1</can_fetch_transaction_info>
+                <can_fetch_transaction_information>1</can_fetch_transaction_information>
                 <can_get_saved_payments>1</can_get_saved_payments>
                 <active>1</active>
                 <title>UPI</title>

@@ -51,7 +51,7 @@ class CustomerDataBuilder implements BuilderInterface
 
         $returnData = [
             'loginCustomer' => $isLoginCustomer,
-            'Email' => $order->getCustomerEmail()
+            'Email' => $paymentDO->getPayment()->getOrder()->getCustomerEmail()
         ];
 
         if ($isLoginCustomer) {

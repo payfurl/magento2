@@ -7,6 +7,7 @@ namespace Payfurl\Payment\Gateway\Response;
 
 use Payfurl\Payment\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Helper\ContextHelper;
+use Payfurl\Payment\Gateway\Validator\ChargeResponseValidator;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 
@@ -28,6 +29,12 @@ class PaymentDataHandler extends AdditionalDataHandler
 
         $payment->setCcTransId($transaction['chargeId']);
         $payment->setLastTransId($transaction['chargeId']);
+
+        // Not settled yet (PayID, PayTo, ...): Magento leaves the invoice unpaid and the order in Payment Review
+        // until "Get Payment Update" or a payFURL webhook fetches the final status.
+        if (in_array($transaction['status'] ?? '', ChargeResponseValidator::PENDING_STATUSES, true)) {
+            $payment->setIsTransactionPending(true);
+        }
 
         $additionalData = $this->getAdditionalDataByType($transaction);
 

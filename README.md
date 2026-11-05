@@ -98,3 +98,16 @@ Login to the admin interface and then go to the Stores -> Configuration, then Sa
 
 You need to select the environment and fill in **Public Key** and **Secret Key** fields.
 Make sure to use the right key for the environment (use the test key in sandbox and the live key in production)
+
+### How payments are checked
+
+The module checks every payment with payFURL before it invoices the order. The charge must have succeeded for
+the order's amount and currency. A charge another order already uses is refused.
+
+Some payment methods (PayID, PayTo and other checkout methods) are still pending when the order is placed. Those
+orders wait in **Payment Review** with an unpaid invoice until the payment settles:
+
+- **Automatically:** in the payFURL portal, add a Transaction webhook on **Webhooks** pointing at
+  `https://<your store>/payfurl/webhook`. Then paste the **Webhook Secret Key** from **Account Info** into
+  **Webhook signing key**.
+- **By hand:** open the order and press **Get Payment Update**.

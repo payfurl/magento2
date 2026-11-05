@@ -269,6 +269,7 @@
             <argument name="commands" xsi:type="array">
                 <item name="capture" xsi:type="string">PayfurlCaptureCommand</item>
                 <item name="refund" xsi:type="string">PayfurlRefundCommand</item>
+                <item name="fetch_transaction_information" xsi:type="string">PayfurlFetchTransactionCommand</item>
             </argument>
         </arguments>
     </virtualType>
@@ -279,7 +280,7 @@
             <argument name="transferFactory" xsi:type="object">Payfurl\Payment\Gateway\Http\TransferFactory</argument>
             <argument name="client" xsi:type="object">Payfurl\Payment\Gateway\Http\Client\TransactionCapture</argument>
             <argument name="handler" xsi:type="object">PaufurlCaptureHandler</argument>
-            <argument name="validator" xsi:type="object">Payfurl\Payment\Gateway\Validator\GeneralResponseValidator</argument>
+            <argument name="validator" xsi:type="object">Payfurl\Payment\Gateway\Validator\ChargeResponseValidator</argument>
             <argument name="errorMessageMapper" xsi:type="object">Payfurl\Payment\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
@@ -302,6 +303,18 @@
                 <item name="additional_data" xsi:type="string">Payfurl\Payment\Gateway\Response\AdditionalDataHandler</item>
                 <item name="payfurl_customer_id" xsi:type="string">Payfurl\Payment\Gateway\Response\CustomerDataHandler</item>
             </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Order\Payment::update(): "Get Payment Update" in the admin, and payFURL webhooks -->
+    <virtualType name="PayfurlFetchTransactionCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">Payfurl\Payment\Gateway\Request\FetchTransactionDataBuilder</argument>
+            <argument name="transferFactory" xsi:type="object">Payfurl\Payment\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">Payfurl\Payment\Gateway\Http\Client\TransactionFetch</argument>
+            <argument name="handler" xsi:type="object">Payfurl\Payment\Gateway\Response\FetchTransactionHandler</argument>
+            <argument name="validator" xsi:type="object">Payfurl\Payment\Gateway\Validator\GeneralResponseValidator</argument>
+            <argument name="errorMessageMapper" xsi:type="object">Payfurl\Payment\Gateway\ErrorMapper\VirtualErrorMessageMapper</argument>
         </arguments>
     </virtualType>
 
@@ -349,7 +362,7 @@
             <argument name="customLogger" xsi:type="object">PayfurlLogger</argument>
         </arguments>
     </type>
-    <type name="Payfurl\Payment\Gateway\Request\PaymentDataBuilder">
+    <type name="Payfurl\Payment\Gateway\Http\Client\TransactionFetch">
         <arguments>
             <argument name="customLogger" xsi:type="object">PayfurlLogger</argument>
         </arguments>
@@ -402,6 +415,4 @@
         </arguments>
     </virtualType>
     <!-- End virtual type for errorMessageMapper  -->
-
-    <preference for="Magento\Payment\Gateway\Data\Order\OrderAdapter" type="Payfurl\Payment\Gateway\Data\OrderAdapter"/>
 </config>
