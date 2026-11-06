@@ -32,7 +32,7 @@ define(
       getFormId: function() {
         return `payfurl-checkout-form-${this.getProviderType()}`;
       },
-      initPaymentCheckoutForm: function () {
+      initPaymentForm: function () {
         payfurl
           .addCheckout(
             this.getFormId(),

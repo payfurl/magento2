@@ -20,7 +20,7 @@
     </div>
 
     <form data-bind="attr: {'id': getCode() + '_form'}" class="form"  action="/" method="post">
-      <div data-bind="attr: {'id': getFormId()}, afterRender: initPaymentCheckoutForm()"></div>
+      <div data-bind="attr: {'id': getFormId()}, afterRender: mountWhenSelected"></div>
       <div class="checkout-agreements-block">
         <!-- ko foreach: $parent.getRegion('before-place-order') -->
         <!-- ko template: getTemplate() --><!-- /ko -->

@@ -30,6 +30,9 @@ release notes.
 - Phone numbers are sent as entered: the `+61` prefix is no longer added.
 - Product codes and names on the payFURL order are no longer cut to 12 characters, and a configurable product
   is listed once.
+- Each payFURL payment form (card, PayPal, Apple Pay, Google Pay, PayTo, checkout methods) loads when the shopper
+  first selects it, not when the payment step opens. Click to Pay starts when the shopper selects the card method,
+  so a shopper who pays another way is not sent a Click to Pay passcode, and the email they type is the one used.
 - The debug log (`var/log/payfurl.log`) masks the shopper's name, email, phone, address and card details.
 
 ### Added

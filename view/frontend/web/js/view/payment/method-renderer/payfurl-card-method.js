@@ -23,14 +23,14 @@ define(
       getFormId: function () {
         return 'payfurl-card-form';
       },
-      initPaymentCardForm: function () {
+      initPaymentForm: function () {
         payfurl
           .addCardLeastCost(
             this.getFormId(),
             this.getTotal(),
             this.getCurrency(),
             {
-              threeDSEmail: this.customerEmail,
+              threeDSEmail: this.customerEmail(),
               style: "compact"
             },
           );

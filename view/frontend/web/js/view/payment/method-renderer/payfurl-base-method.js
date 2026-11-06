@@ -116,7 +116,7 @@ define(
       isCustomerLoggedIn: window.checkoutConfig.isCustomerLoggedIn,
       totals: quote.totals,
       checkCard: ko.observable('saved'),
-      customerEmail: customerEmail(),
+      formMounted: false,
 
       defaults: {
         template: 'Payfurl_Payment/payment/payfurl-card-form',
@@ -139,6 +139,31 @@ define(
         wireOnce();
 
         return this;
+      },
+      customerEmail: function () {
+        return customerEmail();
+      },
+      /**
+       * The form's afterRender: the SDK form (and the card form's Click to Pay, which can send the shopper a passcode)
+       * is added when the shopper first selects this method, not when the checkout renders every method.
+       */
+      mountWhenSelected: function () {
+        const mount = () => {
+          if (this.formMounted) return;
+          this.formMounted = true;
+          this.initPaymentForm();
+        };
+        if (quote.paymentMethod()?.method === this.getCode()) {
+          mount();
+          return;
+        }
+        const selected = quote.paymentMethod.subscribe((method) => {
+          if (method?.method !== this.getCode()) return;
+          selected.dispose();
+          mount();
+        });
+      },
+      initPaymentForm: function () {
       },
       getSavedPaymentMethods: function () {
         let savedPayments = payfurlConfig.getSavedPaymentMethods();

@@ -20,7 +20,7 @@
     </div>
 
     <form id="payfurl_paypal_form" class="form"  action="/" method="post">
-      <div id="payfurl-paypal-form" data-bind="afterRender: initPaymentPaypalForm()"></div>
+      <div id="payfurl-paypal-form" data-bind="afterRender: mountWhenSelected"></div>
       <div class="checkout-agreements-block">
         <!-- ko foreach: $parent.getRegion('before-place-order') -->
         <!-- ko template: getTemplate() --><!-- /ko -->

@@ -58,7 +58,7 @@
     <!-- /ko -->
 
     <form id="payfurl_card_form" class="form" action="#" method="post" data-bind="visible: checkCard() == 'new'">
-      <div id="payfurl-card-form" data-bind="afterRender: initPaymentCardForm()"></div>
+      <div id="payfurl-card-form" data-bind="afterRender: mountWhenSelected"></div>
       <div class="actions-toolbar">
         <input type="checkbox" id="save_my_payment_method" value="save">
         <label for="save_my_payment_method" class="label">

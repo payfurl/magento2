@@ -20,7 +20,7 @@
     </div>
 
     <form id="payfurl_applepay_form" class="form"  action="/" method="post">
-      <div id="payfurl-applepay-form" data-bind="afterRender: initPaymentApplePayForm()"></div>
+      <div id="payfurl-applepay-form" data-bind="afterRender: mountWhenSelected"></div>
       <div class="checkout-agreements-block">
         <!-- ko foreach: $parent.getRegion('before-place-order') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
