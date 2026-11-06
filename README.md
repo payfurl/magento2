@@ -83,7 +83,7 @@ only those:
 | Card | Your account has a card gateway. Logged-in customers can save a card and pay with it next time. |
 | PayPal | Your account has a PayPal gateway. |
 | Google Pay | **Enable GooglePay** is on and your account has a Google Pay gateway. |
-| Apple Pay | **Enable ApplePay** is on, your account has an Apple Pay gateway, and the shopper uses Safari. |
+| Apple Pay | **Enable ApplePay** is on, Apple Pay is set up in payFURL for your domain (see [Apple Pay](#apple-pay)), and the shopper uses an Apple device. |
 | PayTo | Your account has a PayTo gateway. |
 | PayID, Shift, Pay By Account, UPI | Your account has that checkout provider. Other checkout providers (for example Pesapal, PayGLocal or Zip) are not offered by this module. |
 
@@ -109,6 +109,22 @@ The webhook settles pending payments without anyone pressing **Get Payment Updat
 
 The store checks each webhook's signature with that key, then asks payFURL for the payment's status: the
 webhook's own content is never trusted.
+
+## Apple Pay
+
+Apple shows Apple Pay only on domains verified for it, so it needs these steps, in this order:
+
+1. In the payFURL portal, open the connection (gateway) that should take Apple Pay and turn Apple Pay on.
+2. In **Settings > Apple Pay**, turn Apple Pay on and download the domain verification file.
+3. Make the file reachable at `https://<your domain>/.well-known/apple-developer-merchantid-domain-association`,
+   for every domain the checkout runs on (with Magento's web root at `pub/`, the file goes in `pub/.well-known/`).
+   Check it opens in a browser, without a redirect or a login.
+4. Back in **Settings > Apple Pay**, add each of those domains. Apple checks the file on all of them; one that
+   fails stops the others being added.
+5. In Magento, set **Enable ApplePay** to Yes.
+
+Apple Pay then shows at checkout in Safari on a Mac, and in browsers on iPhone and iPad, for shoppers with a card in Apple Wallet. If it still doesn't,
+the portal's **Settings > Apple Pay** page shows each connection's status.
 
 ## Content Security Policy
 
