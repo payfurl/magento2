@@ -134,6 +134,12 @@ Secure page, for example), add that host in a `csp_whitelist.xml` of your own mo
 | `just test` | Unit tests (`Test/Unit`), PHPStan and the Magento coding standard, as CI runs them. Magento's packages come from the [Mage-OS mirror](https://mirror.mage-os.org/), so no repo.magento.com keys are needed. |
 | `just e2e` | The browser end-to-end tests, in a Magento store against a local payFURL stack. They live in payFURL's platform repository (`e2e/api-tests/magento`), which needs a checkout beside this one (or `PLATFORM_DIR`). |
 
+To try a change by hand, run a local store from the platform checkout: `just magento up` starts Magento at
+http://localhost:8081 with this checkout mounted (edits show after a reload; run `bin/magento cache:flush` in
+`just magento shell` after changing XML), `just magento init <public key>` points it at an account on the local
+payFURL stack (`just dev`) and imports Magento's sample products, and `just magento down` stops it. Details are in
+the platform repository's `e2e/api-tests/magento/README.md`.
+
 GitHub Actions run `just test`'s checks on every pull request, on each supported PHP version
 (`.github/workflows/ci.yml`).
 
