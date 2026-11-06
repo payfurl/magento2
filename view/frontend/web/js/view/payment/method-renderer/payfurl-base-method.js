@@ -23,6 +23,14 @@ define(
       return renderers[quote.paymentMethod()?.method];
     }
 
+    // 1.x's per-method form methods. 2.0 renderers define initPaymentForm instead.
+    const LEGACY_INIT_METHODS = ['initPaymentCardForm', 'initPaymentPaypalForm', 'initPaymentApplePayForm',
+      'initPaymentGooglePayForm', 'initPaymentPayToForm', 'initPaymentCheckoutForm'];
+
+    function mountWhenSelectedAlias() {
+      return this.mountWhenSelected();
+    }
+
     function customerEmail() {
       return window.checkoutConfig.customerData?.email || quote.guestEmail;
     }
@@ -140,7 +148,9 @@ define(
 
         return this;
       },
-      customerEmail: function () {
+      // 1.x's property, read once when the checkout loads: a theme that overrides a payFURL file from 1.x reads it.
+      customerEmail: customerEmail(),
+      getCustomerEmail: function () {
         return customerEmail();
       },
       /**
@@ -155,16 +165,31 @@ define(
         };
         if (quote.paymentMethod()?.method === this.getCode()) {
           mount();
-          return;
+          return this;
         }
         const selected = quote.paymentMethod.subscribe((method) => {
           if (method?.method !== this.getCode()) return;
           selected.dispose();
           mount();
         });
+        return this;
       },
+      /**
+       * Each renderer adds its SDK form here. A theme's renderer from 1.x has its 1.x method instead
+       * (initPaymentCardForm, ...), so that is called.
+       */
       initPaymentForm: function () {
+        const legacy = LEGACY_INIT_METHODS.find((name) => this[name] !== mountWhenSelectedAlias);
+        return legacy ? this[legacy]() : this;
       },
+      // 1.x templates call these (afterRender: initPaymentCardForm()), so a theme that overrides a payFURL template
+      // from 1.x keeps working.
+      initPaymentCardForm: mountWhenSelectedAlias,
+      initPaymentPaypalForm: mountWhenSelectedAlias,
+      initPaymentApplePayForm: mountWhenSelectedAlias,
+      initPaymentGooglePayForm: mountWhenSelectedAlias,
+      initPaymentPayToForm: mountWhenSelectedAlias,
+      initPaymentCheckoutForm: mountWhenSelectedAlias,
       getSavedPaymentMethods: function () {
         let savedPayments = payfurlConfig.getSavedPaymentMethods();
         if (!savedPayments || savedPayments.length === 0) {

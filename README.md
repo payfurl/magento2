@@ -50,7 +50,9 @@ bin/magento cache:flush
 **From 1.x to 2.0:** update Magento to 2.4.7 or later first; 2.0 doesn't install on older versions. Then
 `composer require payfurl/module-payment:^2.0` and the commands above. After upgrading, set up the webhook (see
 [Webhooks](#webhooks)) so payments that settle later complete their orders. If your own code used methods the 1.x
-module added to Magento's payment order adapter, see the 2.0.0 entry in the [changelog](CHANGELOG.md).
+module added to Magento's payment order adapter, see the 2.0.0 entry in the [changelog](CHANGELOG.md). If your
+theme overrides the module's checkout files (`Payfurl_Payment` templates or JavaScript), they keep working, but
+2.0's checkout fixes apply only to the module's own files: remove the overrides you no longer need.
 
 ## Configure
 

@@ -30,7 +30,7 @@ define(
             this.getTotal(),
             this.getCurrency(),
             {
-              threeDSEmail: this.customerEmail(),
+              threeDSEmail: this.getCustomerEmail(),
               style: "compact"
             },
           );

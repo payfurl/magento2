@@ -33,6 +33,9 @@ release notes.
 - Each payFURL payment form (card, PayPal, Apple Pay, Google Pay, PayTo, checkout methods) loads when the shopper
   first selects it, not when the payment step opens. Click to Pay starts when the shopper selects the card method,
   so a shopper who pays another way is not sent a Click to Pay passcode, and the email they type is the one used.
+- Checkout files a theme overrides from 1.x (the card form template and the payment method renderers) keep working:
+  the 1.x method names and the `customerEmail` property are still there. 2.0's checkout fixes apply only to the
+  module's own files, so remove overrides you no longer need.
 - The debug log (`var/log/payfurl.log`) masks the shopper's name, email, phone, address and card details.
 
 ### Added
