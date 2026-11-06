@@ -112,19 +112,24 @@ webhook's own content is never trusted.
 
 ## Apple Pay
 
-Apple shows Apple Pay only on domains verified for it, so it needs these steps, in this order:
+Apple Pay shows at checkout when **Enable ApplePay** is Yes and payFURL reports an Apple Pay gateway for your
+account. In the payFURL portal that takes:
 
-1. In the payFURL portal, open the connection (gateway) that should take Apple Pay and turn Apple Pay on.
-2. In **Settings > Apple Pay**, turn Apple Pay on and download the domain verification file.
-3. Make the file reachable at `https://<your domain>/.well-known/apple-developer-merchantid-domain-association`,
-   for every domain the checkout runs on (with Magento's web root at `pub/`, the file goes in `pub/.well-known/`).
-   Check it opens in a browser, without a redirect or a login.
-4. Back in **Settings > Apple Pay**, add each of those domains. Apple checks the file on all of them; one that
-   fails stops the others being added.
-5. In Magento, set **Enable ApplePay** to Yes.
+1. **Settings > Apple Pay**: Apple Pay turned on for the account. The account's legal name, website and country
+   (in its settings) must be filled in.
+2. The gateway connection that takes Apple Pay, with Apple Pay turned on.
 
-Apple Pay then shows at checkout in Safari on a Mac, and in browsers on iPhone and iPad, for shoppers with a card in Apple Wallet. If it still doesn't,
-the portal's **Settings > Apple Pay** page shows each connection's status.
+Apple also verifies every domain your checkout runs on, and who does that depends on the gateway:
+
+- **Westpac PayWay**: PayWay's own Apple Pay button runs the payment, so the domain is registered with Westpac,
+  not payFURL. Set up Apple Pay for your PayWay facility with Westpac, and follow their domain steps.
+- **Other gateways**: in **Settings > Apple Pay**, download the domain verification file and make it reachable at
+  `https://<your domain>/.well-known/apple-developer-merchantid-domain-association` (with Magento's web root at
+  `pub/`, it goes in `pub/.well-known/`), without a redirect or a login. Then add each domain on that page. Apple
+  checks the file on all of them; one that fails stops the others being added.
+
+Apple Pay then shows in Safari on a Mac, and in browsers on iPhone and iPad, for shoppers with a card in Apple
+Wallet. The portal's **Settings > Apple Pay** page shows each connection's status.
 
 ## Content Security Policy
 
