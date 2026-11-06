@@ -148,33 +148,6 @@ Secure page, for example), add that host in a `csp_whitelist.xml` of your own mo
 | The card form or a wallet button doesn't load | The browser console: a CSP error (see above) or a blocked `assets.payfurl.com`. |
 | Anything else | Turn **Debug** on and send `var/log/payfurl.log` to payFURL support. Personal and card details are masked in it. |
 
-## Development
+## Contributing
 
-| Command | What |
-| --- | --- |
-| `just test` | Unit tests (`Test/Unit`), PHPStan and the Magento coding standard, as CI runs them. Magento's packages come from the [Mage-OS mirror](https://mirror.mage-os.org/), so no repo.magento.com keys are needed. |
-| `just e2e` | The browser end-to-end tests, in a Magento store against a local payFURL stack. They live in payFURL's platform repository (`e2e/api-tests/magento`), which needs a checkout beside this one (or `PLATFORM_DIR`). |
-
-To try a change by hand, run a local store from the platform checkout: `just magento up` starts Magento at
-http://localhost:8081 with this checkout mounted (edits show after a reload; run `bin/magento cache:flush` in
-`just magento shell` after changing XML), `just magento init <public key>` points it at an account on the local
-payFURL stack (`just dev`) and imports Magento's sample products, and `just magento down` stops it. Details are in
-the platform repository's `e2e/api-tests/magento/README.md`.
-
-GitHub Actions run `just test`'s checks on every pull request, on each supported PHP version
-(`.github/workflows/ci.yml`).
-
-## Releasing
-
-1. Move the `## [Unreleased]` entries in `CHANGELOG.md` under `## [X.Y.Z] - <date>`, set `"version": "X.Y.Z"`
-   in `composer.json`, and merge to `main`.
-2. Tag the merge `vX.Y.Z` and push the tag.
-
-The release workflow (`.github/workflows/release.yml`) fails if the tag and `composer.json` disagree, creates the
-GitHub release with that version's changelog section, and updates Packagist (secrets `PACKAGIST_USERNAME` and
-`PACKAGIST_TOKEN`). Versions follow semver: a browser SDK update is a patch, a new feature a minor version.
-
-When payFURL releases a new browser SDK to production, the SDK bump workflow (`.github/workflows/sdk-bump.yml`,
-daily) opens a pull request that pins it in `view/frontend/requirejs-config.js`, bumps the patch version and adds
-the changelog entry. Run the e2e tests on its branch before merging, then tag it. For CI to run on that pull request,
-set the `SDK_BUMP_TOKEN` secret (a GitHub token that can push and open pull requests here).
+Bug reports and pull requests are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md).
