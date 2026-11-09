@@ -78,7 +78,7 @@ class PayfurlAdapter
     ): bool {
         foreach ([$secretKey, $publicKey] as $key) {
             try {
-                if (self::createClient($key, $environment, $options)->info()->providers()->hasCardProviders === null) {
+                if (self::createClient($key, $environment, $options)->info->providers()->hasCardProviders === null) {
                     return false;
                 }
             } catch (PayfurlException | \InvalidArgumentException $exception) {
@@ -94,7 +94,7 @@ class PayfurlAdapter
      */
     public function chargeByToken($data)
     {
-        return $this->call(fn() => $this->client()->charges()->createWithToken(
+        return $this->call(fn() => $this->client()->charges->createWithToken(
             new NewChargeToken(...self::charge($data), token: (string) $data['Token'])
         )->toArray());
     }
@@ -105,7 +105,7 @@ class PayfurlAdapter
      */
     public function getTransactionInfo($data)
     {
-        return $this->call(fn() => $this->client()->charges()->get((string) $data['ChargeId'])->toArray());
+        return $this->call(fn() => $this->client()->charges->get((string) $data['ChargeId'])->toArray());
     }
 
     /**
@@ -115,7 +115,7 @@ class PayfurlAdapter
     public function refund($data)
     {
         $amount = (float) ($data['Amount'] ?? 0);
-        return $this->call(fn() => $this->client()->charges()->refund(
+        return $this->call(fn() => $this->client()->charges->refund(
             (string) $data['ChargeId'],
             $amount > 0 ? $amount : null,
             self::string($data, 'Comment')
@@ -130,7 +130,7 @@ class PayfurlAdapter
     {
         return $this->call(fn() => array_map(
             static fn(PaymentMethodData $paymentMethod) => $paymentMethod->toArray(),
-            $this->client()->customers()->paymentMethods((string) $data['CustomerId'])
+            $this->client()->customers->paymentMethods((string) $data['CustomerId'])
         ));
     }
 
@@ -140,7 +140,7 @@ class PayfurlAdapter
      */
     public function chargeByPaymentMethod($data)
     {
-        return $this->call(fn() => $this->client()->charges()->createWithPaymentMethod(
+        return $this->call(fn() => $this->client()->charges->createWithPaymentMethod(
             new NewChargePaymentMethod(...self::charge($data), paymentMethodId: (string) $data['PaymentMethodId'])
         )->toArray());
     }
@@ -156,14 +156,14 @@ class PayfurlAdapter
     public function chargeByCustomerToken($data, $customerPayfurlId)
     {
         return $this->call(function () use ($data, $customerPayfurlId) {
-            $charges = $this->client()->charges();
+            $charges = $this->client()->charges;
             $token = (string) $data['Token'];
             if (empty($data['payfurlSaveMyPayment'])) {
                 return $charges->createWithToken(new NewChargeToken(...self::charge($data), token: $token))->toArray();
             }
 
             if ($customerPayfurlId) {
-                $paymentMethod = $this->client()->customers()->addPaymentMethodWithToken(
+                $paymentMethod = $this->client()->customers->addPaymentMethodWithToken(
                     (string) $customerPayfurlId,
                     new NewPaymentMethodToken(token: $token)
                 );
@@ -176,7 +176,7 @@ class PayfurlAdapter
                 ))->toArray();
             }
 
-            $customer = $this->client()->customers()->createWithToken(new NewCustomerToken(
+            $customer = $this->client()->customers->createWithToken(new NewCustomerToken(
                 token: $token,
                 reference: self::string($data, 'Reference'),
                 firstName: self::string($data, 'FirstName'),
@@ -200,7 +200,7 @@ class PayfurlAdapter
     public function getProvidersInfo($data)
     {
         $amount = $data['amount'] ?? null;
-        return $this->call(fn() => $this->client()->info()->providers(
+        return $this->call(fn() => $this->client()->info->providers(
             is_numeric($amount) ? (float) $amount : null,
             self::string($data, 'currency'),
             self::BROWSER_SDK_VERSION
