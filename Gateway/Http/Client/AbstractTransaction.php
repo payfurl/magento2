@@ -83,7 +83,8 @@ abstract class AbstractTransaction implements ClientInterface
      * @param array $data
      * @param PayfurlAdapter $adapter set up with the keys of the order's store
      * @return mixed
-     * @throw \payFURL\Sdk\ResponseException
+     * @throws \Magento\Framework\Exception\LocalizedException when the request can't be made; an API error is
+     *     returned as `errorMessage` and `errorCode`, not thrown
      */
     abstract protected function process(array $data, PayfurlAdapter $adapter);
 }

@@ -2,7 +2,7 @@
   "name": "payfurl/module-payment",
   "description": "payFURL payments for Magento 2 / Adobe Commerce",
   "type": "magento2-module",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "license": "proprietary",
   "authors": [
     {
@@ -21,7 +21,7 @@
     "magento/module-quote": "~101.2.7",
     "magento/module-sales": "~103.0.7",
     "magento/module-store": "~101.1.7",
-    "payfurl/phpsdk": "^2.1.5"
+    "payfurl/phpsdk": "^3.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^10.5",

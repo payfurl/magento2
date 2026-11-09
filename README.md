@@ -29,7 +29,8 @@ bin/magento cache:flush
 bin/magento maintenance:disable
 ```
 
-Composer installs the module from Packagist and the payFURL PHP SDK it needs. If Composer asks for
+Composer installs the module from Packagist and the payFURL PHP SDK it needs (`payfurl/phpsdk` 3.x; a later 3.x
+release installs with `composer update payfurl/phpsdk`). If Composer asks for
 `repo.magento.com` credentials, use your Commerce Marketplace access keys: at
 [marketplace.magento.com](https://marketplace.magento.com/), **My Profile > Marketplace > Access Keys**. The public
 key is the username and the private key the password.

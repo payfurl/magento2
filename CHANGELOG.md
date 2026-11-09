@@ -8,6 +8,16 @@ release notes.
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-11-09
+
+### Changed
+
+- Requires the payFURL PHP SDK 3 (`payfurl/phpsdk ^3.0`, which Composer installs with the module), with one SDK
+  client per store's keys instead of global settings. Later 3.x SDK releases install without a module release.
+  **Validate Credentials** checks the public key with the SDK, as a public key, instead of a made-up secret key.
+- The checkout's payment methods list PayPal for the browser SDK the checkout loads: the module tells payFURL that
+  version, where it used to send a fixed `4.5.7`.
+
 ## [2.0.0] - 2026-11-05
 
 ### Changed
