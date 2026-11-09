@@ -27,6 +27,11 @@ release notes.
   it.
 - A saved card can only be charged for the logged-in customer it belongs to.
 - Payments use the API keys of the order's store, so admin refunds on a multi-website store use the right keys.
+- Requires the payFURL PHP SDK 3 (`payfurl/phpsdk ^3.0`, which Composer installs with the module), with one SDK
+  client per store's keys instead of global settings. Later 3.x SDK releases install without a module release.
+  **Validate Credentials** checks the public key with the SDK, as a public key, instead of a made-up secret key.
+- The checkout's payment methods list PayPal for the browser SDK the checkout loads: the module tells payFURL that
+  version, where it used to send a fixed `4.5.7`.
 - Phone numbers are sent as entered: the `+61` prefix is no longer added.
 - Product codes and names on the payFURL order are no longer cut to 12 characters, and a configurable product
   is listed once.

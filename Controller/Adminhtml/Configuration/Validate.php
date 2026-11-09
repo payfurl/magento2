@@ -7,10 +7,7 @@ use Exception;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
-use payFURL\Sdk as PayFurlSDK;
-use payFURL\Sdk\HttpWrapper;
-use payFURL\Sdk\ResponseException;
-use payFURL\Sdk\UrlTools;
+use Payfurl\Payment\Model\Adapter\PayfurlAdapter;
 
 class Validate extends Action
 {
@@ -72,51 +69,12 @@ class Validate extends Action
         $response = $this->resultFactory->create(ResultFactory::TYPE_JSON);
 
         try {
-            PayFurlSDK\Config::initialise($privateKey, $environment);
-
-            if ($this->checkSecretKey() && $this->checkPublicKey($publicKey)) {
-                $response->setData(['success' => 'true']);
-            } else {
-                $response->setData(['success' => 'false']);
-            }
-
+            $valid = PayfurlAdapter::keysWork((string) $publicKey, (string) $privateKey, (string) $environment);
+            $response->setData(['success' => $valid ? 'true' : 'false']);
         } catch (Exception $e) {
             $response->setData(['success' => 'false']);
         }
 
         return $response;
-    }
-
-    protected function checkSecretKey()
-    {
-        $svc = new PayFurlSDK\Info();
-        $result = $svc->Providers([]);
-        if (array_key_exists('hasCardProviders', $result)) {
-            return true;
-        }
-        return false;
-    }
-
-    protected function checkPublicKey($key)
-    {
-        $result = $this->ProvidersByPublicKey($key);
-        if (array_key_exists('hasCardProviders', $result)) {
-            return true;
-        }
-        return false;
-    }
-
-    public function ProvidersByPublicKey($publicKey)
-    {
-        try {
-            $url = '/info/providers';
-            $addHeaders = [
-                'x-publickey' => $publicKey,
-                'x-secretkey' => 'secret', // override the existing secret to validate public key
-            ];
-            return HttpWrapper::CallApi($url, 'GET', '', $addHeaders);
-        } catch (\Exception $ex) {
-            throw new ResponseException($ex->getMessage(), 0, 0, false);
-        }
     }
 }

@@ -1,7 +1,17 @@
-# A new browser SDK in production opens a PR that pins it. A new @payfurl/client on npm is the signal: only the
-# platform's master `deploy sdk` publishes it, while sandbox uploads /vX.Y.Z/ to the asset bucket earlier, so an
-# asset URL existing is not one. The PR bumps the pinned assets.payfurl.com URL and the patch version and adds a
-# changelog entry. Its body asks for the e2e run in payfurl/platform before merging.
+# New SDK releases open PRs.
+#
+# browser-sdk: a new browser SDK in production. A new @payfurl/client on npm is the signal: only the platform's
+# master `deploy sdk` publishes it, while sandbox uploads /vX.Y.Z/ to the asset bucket earlier, so an asset URL
+# existing is not one. The PR bumps the pinned assets.payfurl.com URL (and PayfurlAdapter::BROWSER_SDK_VERSION, which
+# /info/providers is told) and the patch version and adds a changelog entry.
+#
+# php-sdk: a new payfurl/phpsdk on Packagist (repo.packagist.org/p2, no token). Composer already installs any 3.x
+# release for the module's `^3.x` constraint, so a minor or patch PR raises the minimum to the new version, which
+# this release has then been tested with. A new major is not compatible: its PR is a draft that only changes the
+# constraint, to start the migration from.
+#
+# Each PR's body asks for the e2e run in payfurl/platform before merging. Two PRs open the same day bump to the same
+# patch version: merge one, and the other's conflict shows which to rebase.
 #
 # A PR opened with the default GITHUB_TOKEN does not start other workflows, so CI would not run on it: set the
 # SDK_BUMP_TOKEN secret (a fine-grained token with contents and pull-requests write on this repository) for that.
@@ -17,7 +27,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  bump:
+  browser-sdk:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -54,6 +64,7 @@ jobs:
         run: |
           sed -i "s#assets.payfurl.com/v$PINNED/js/payfurl.js#assets.payfurl.com/v$LATEST/js/payfurl.js#" \
             view/frontend/requirejs-config.js
+          sed -i -E "s/(BROWSER_SDK_VERSION = ')[0-9.]+(')/\1$LATEST\2/" Model/Adapter/PayfurlAdapter.php
           current=$(jq -r .version composer.json)
           next=$(echo "$current" | awk -F. '{ printf "%d.%d.%d", $1, $2, $3 + 1 }')
           sed -i "s/\"version\": \"$current\"/\"version\": \"$next\"/" composer.json
@@ -71,5 +82,79 @@ jobs:
           git push origin "$BRANCH"
           gh pr create --base main --head "$BRANCH" --title "Browser SDK v$LATEST (module $next)" --body \
             "Pins the browser SDK released to production as @payfurl/client v$LATEST ([changelog](https://docs.payfurl.com/client_sdk/changelog)) and bumps the module to $next.
+
+          Before merging, run the e2e suite against this branch from a payfurl/platform checkout: \`MAGENTO_PLUGIN_DIR=<this checkout> just e2e magento\`. After merging, tag \`v$next\` to release it."
+
+  php-sdk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.SDK_BUMP_TOKEN || github.token }}
+
+      - name: Compare the required SDK with Packagist
+        id: sdk
+        run: |
+          latest=$(curl -fsS https://repo.packagist.org/p2/payfurl/phpsdk.json \
+            | jq -r '.packages["payfurl/phpsdk"][].version' | sed 's/^v//' \
+            | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -1)
+          if [ -z "$latest" ]; then
+            echo "::error::no payfurl/phpsdk release on Packagist"
+            exit 1
+          fi
+          constraint=$(jq -r '.require["payfurl/phpsdk"]' composer.json)
+          if ! [[ "$constraint" =~ ^\^([0-9]+)(\.[0-9]+)?(\.[0-9]+)?$ ]]; then
+            echo "::error::composer.json requires payfurl/phpsdk '$constraint', not ^X.Y.Z: bump it by hand"
+            exit 1
+          fi
+          major=${BASH_REMATCH[1]}
+          required="$major${BASH_REMATCH[2]:-.0}${BASH_REMATCH[3]:-.0}"
+          echo "required $required ($constraint), Packagist $latest"
+          branch="phpsdk-bump/v$latest"
+          if [ "$(printf '%s\n' "$required" "$latest" | sort -V | tail -1)" = "$required" ] \
+            || git ls-remote --exit-code --heads origin "$branch" >/dev/null; then
+            echo "nothing to do"
+            exit 0
+          fi
+          { echo "latest=$latest"; echo "required=$required"; echo "branch=$branch"
+            echo "major=$([ "${latest%%.*}" != "$major" ] && echo true || echo false)"; } >> "$GITHUB_OUTPUT"
+
+      - name: Open the PR
+        if: steps.sdk.outputs.latest
+        env:
+          GH_TOKEN: ${{ secrets.SDK_BUMP_TOKEN || github.token }}
+          LATEST: ${{ steps.sdk.outputs.latest }}
+          REQUIRED: ${{ steps.sdk.outputs.required }}
+          BRANCH: ${{ steps.sdk.outputs.branch }}
+          MAJOR: ${{ steps.sdk.outputs.major }}
+        run: |
+          sed -i -E "s#(\"payfurl/phpsdk\": \")[^\"]+\"#\\1^$LATEST\"#" composer.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -c "$BRANCH"
+          sdk_changelog="https://github.com/payfurl/phpsdk/blob/v$LATEST/CHANGELOG.md"
+
+          if [ "$MAJOR" = true ]; then
+            git commit -am "payfurl/phpsdk v$LATEST: a new major, to migrate to"
+            git push origin "$BRANCH"
+            gh pr create --draft --base main --head "$BRANCH" --title "payfurl/phpsdk v$LATEST (new major: needs a migration)" --body \
+              "payfurl/phpsdk v$LATEST is a new major version ([changelog]($sdk_changelog), and the SDK's UPGRADE.md). This draft only changes the constraint from ^$REQUIRED to ^$LATEST: the module's SDK calls (Model/Adapter/PayfurlAdapter.php) need migrating by hand, with the module's own major or minor version and changelog entry.
+
+          Before merging, run the e2e suite against this branch from a payfurl/platform checkout: \`MAGENTO_PLUGIN_DIR=<this checkout> just e2e magento\`."
+            exit 0
+          fi
+
+          current=$(jq -r .version composer.json)
+          next=$(echo "$current" | awk -F. '{ printf "%d.%d.%d", $1, $2, $3 + 1 }')
+          sed -i "s/\"version\": \"$current\"/\"version\": \"$next\"/" composer.json
+          entry="## [$next] - $(date -u +%F)\n\n### Changed\n\n- Requires payfurl/phpsdk $LATEST or a later 3.x (was $REQUIRED)\n  ([SDK changelog]($sdk_changelog)).\n"
+          awk -v entry="$entry" '{ print } /^## \[Unreleased\]/ { printf "\n%s", entry }' CHANGELOG.md > CHANGELOG.tmp
+          sed -i -E "s#^\[Unreleased\]: (.*)/compare/v[0-9.]+\.\.\.HEAD#[Unreleased]: \1/compare/v$next...HEAD\n[$next]: \1/compare/v$current...v$next#" CHANGELOG.tmp
+          mv CHANGELOG.tmp CHANGELOG.md
+
+          git commit -am "payfurl/phpsdk v$LATEST (module $next)"
+          git push origin "$BRANCH"
+          gh pr create --base main --head "$BRANCH" --title "payfurl/phpsdk v$LATEST (module $next)" --body \
+            "Requires payfurl/phpsdk $LATEST ([changelog]($sdk_changelog)), the release now on Packagist, and bumps the module to $next. Stores already get it through the module's caret constraint: this sets the minimum to the version it was tested with.
 
           Before merging, run the e2e suite against this branch from a payfurl/platform checkout: \`MAGENTO_PLUGIN_DIR=<this checkout> just e2e magento\`. After merging, tag \`v$next\` to release it."
