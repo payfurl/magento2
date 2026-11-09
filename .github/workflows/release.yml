@@ -1,7 +1,6 @@
 # Pushing a vX.Y.Z tag releases that version: the tag must match composer.json's version (Packagist skips a tag
-# that doesn't), the GitHub release gets the version's CHANGELOG.md section as notes, and Packagist is told to update.
-# Secrets: PACKAGIST_USERNAME and PACKAGIST_TOKEN (a payfurl/module-payment maintainer's API token,
-# packagist.org > Profile > Show API Token).
+# that doesn't), and the GitHub release gets the version's CHANGELOG.md section as notes. Packagist picks up the tag
+# itself, through its GitHub hook on this repo.
 name: Release
 
 on:
@@ -43,12 +42,3 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh release create "$GITHUB_REF_NAME" --verify-tag --title "$GITHUB_REF_NAME" --notes-file notes.md
-
-      - name: Packagist update
-        env:
-          PACKAGIST_USERNAME: ${{ secrets.PACKAGIST_USERNAME }}
-          PACKAGIST_TOKEN: ${{ secrets.PACKAGIST_TOKEN }}
-        run: |
-          curl -fsS -X POST -H 'Content-Type: application/json' \
-            "https://packagist.org/api/update-package?username=${PACKAGIST_USERNAME}&apiToken=${PACKAGIST_TOKEN}" \
-            -d '{"repository":{"url":"https://packagist.org/packages/payfurl/module-payment"}}'
