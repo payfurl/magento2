@@ -8,9 +8,6 @@ use Payfurl\Payment\Model\Config;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Payfurl\Payment\Model\Adapter\PayfurlAdapter;
 
-/**
- * Class ConfigProvider
- */
 class ConfigProvider implements ConfigProviderInterface
 {
     public const CODE = 'payfurl';

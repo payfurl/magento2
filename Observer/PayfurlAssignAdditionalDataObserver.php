@@ -7,11 +7,11 @@ use Magento\Quote\Api\Data\PaymentInterface;
 
 class PayfurlAssignAdditionalDataObserver extends \Magento\Payment\Observer\AbstractDataAssignObserver
 {
-    const TOKEN_OBJECT_STRING = 'payfurlToken';
-    const PAYFURL_CHARGE_ID = 'payfurlChargeId';
-    const PAYMENT_METHOD_ID = 'paymentMethodId';
+    public const TOKEN_OBJECT_STRING = 'payfurlToken';
+    public const PAYFURL_CHARGE_ID = 'payfurlChargeId';
+    public const PAYMENT_METHOD_ID = 'paymentMethodId';
 
-    const SAVE_MY_PAYMENT = 'payfurlSaveMyPayment';
+    public const SAVE_MY_PAYMENT = 'payfurlSaveMyPayment';
 
     /**
      * @var array

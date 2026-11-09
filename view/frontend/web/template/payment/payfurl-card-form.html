@@ -3,10 +3,10 @@
     <input type="radio"
            name="payment[method]"
            class="radio"
-           data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
+           data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()">
     <label data-bind="attr: {'for': getCode()}" class="label">
       <img class="payment-icon" style="height:25px"
-           data-bind="attr: {'src': require.toUrl('Payfurl_Payment/images/cards3.svg') , 'alt': getTitle()}"/>
+           data-bind="attr: {'src': require.toUrl('Payfurl_Payment/images/cards3.svg') , 'alt': getTitle()}">
       <span data-bind="text: getTitle()"></span>
     </label>
   </div>
@@ -27,8 +27,7 @@
              name="payment_payfurl_radio"
              class="radio"
              data-bind="checked: checkCard"
-             value="saved"
-      />
+             value="saved">
       <label for="payment_payfurl_radio_saved_card" class="label">
         <span>Pay by saved payment methods</span>
       </label>
@@ -51,8 +50,7 @@
              name="payment_payfurl_radio"
              class="radio"
              data-bind="checked: checkCard"
-             value="new"
-      />
+             value="new">
       <label for="payment_payfurl_radio_new_card" class="label">
         <span>Pay a new payment method</span>
       </label>
@@ -60,9 +58,9 @@
     <!-- /ko -->
 
     <form id="payfurl_card_form" class="form" action="#" method="post" data-bind="visible: checkCard() == 'new'">
-      <div id="payfurl-card-form" data-bind="afterRender: initPaymentCardForm()"></div>
+      <div id="payfurl-card-form" data-bind="afterRender: mountWhenSelected"></div>
       <div class="actions-toolbar">
-        <input type="checkbox" id="save_my_payment_method" value="save"/>
+        <input type="checkbox" id="save_my_payment_method" value="save">
         <label for="save_my_payment_method" class="label">
           <span>Save my payment method</span>
         </label>
@@ -78,7 +76,7 @@
       <div class="primary">
         <button class="action primary checkout"
                 data-bind="
-                            click: placeOrderWithSavedCard,
+                            click: placeOrderClick,
                             attr: {title: $t('Place Order')},
                             enable: (getCode() == isChecked()),
                             css: {disabled: !isPlaceOrderActionAllowed()}

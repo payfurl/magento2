@@ -10,6 +10,8 @@ use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
+use Payfurl\Payment\Gateway\Request\PaymentDataBuilder;
+use Payfurl\Payment\Model\Adapter\PayfurlAdapter;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -54,6 +56,8 @@ abstract class AbstractTransaction implements ClientInterface
     public function placeRequest(TransferInterface $transferObject)
     {
         $data = $transferObject->getBody();
+        $storeId = $data[PaymentDataBuilder::STORE_ID] ?? null;
+        unset($data[PaymentDataBuilder::STORE_ID]);
         $log = [
             'request' => $data,
             'client' => static::class
@@ -61,7 +65,7 @@ abstract class AbstractTransaction implements ClientInterface
         $response['object'] = [];
 
         try {
-            $response['object'] = $this->process($data);
+            $response['object'] = $this->process($data, $this->adapterFactory->create(['storeId' => $storeId]));
         } catch (\Exception $e) {
             $message = __($e->getMessage() ?: 'Sorry, but something went wrong');
             $this->logger->critical($message);
@@ -77,8 +81,9 @@ abstract class AbstractTransaction implements ClientInterface
     /**
      * Process http request
      * @param array $data
+     * @param PayfurlAdapter $adapter set up with the keys of the order's store
      * @return mixed
      * @throw \payFURL\Sdk\ResponseException
      */
-    abstract protected function process(array $data);
+    abstract protected function process(array $data, PayfurlAdapter $adapter);
 }

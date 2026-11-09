@@ -14,7 +14,7 @@ use payFURL\Sdk\UrlTools;
 
 class Validate extends Action
 {
-    const ADMIN_RESOURCE = 'Magento_Config::config';
+    public const ADMIN_RESOURCE = 'Magento_Config::config';
 
     /**
      * @var Config

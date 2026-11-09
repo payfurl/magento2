@@ -7,10 +7,6 @@ namespace Payfurl\Payment\Model\Adapter;
 
 use payFURL\Sdk as PayFurlSDK;
 
-/**
- * Class PayfurlAdapter
- * @codeCoverageIgnore
- */
 class PayfurlAdapter
 {
     /**
@@ -20,12 +16,14 @@ class PayfurlAdapter
 
     /**
      * @param \Payfurl\Payment\Model\Config $config
+     * @param int|string|null $storeId the order's store, so a multi-website install uses that website's keys
      */
     public function __construct(
-        \Payfurl\Payment\Model\Config $config
+        \Payfurl\Payment\Model\Config $config,
+        $storeId = null
     ) {
         $this->config = $config;
-        PayFurlSDK\Config::initialise($this->config->getSecretKey(), $this->config->getEnv());
+        PayFurlSDK\Config::initialise($this->config->getSecretKey($storeId), $this->config->getEnv($storeId));
     }
 
     /**
@@ -97,9 +95,6 @@ class PayfurlAdapter
     {
         $svc = new PayFurlSDK\Charge();
         try {
-            if ($data['Phone'] && substr($data['Phone'], 0, 1) == '0') {
-                $data['Phone'] = '+61' . substr($data['Phone'], 1);
-            }
             return $svc->CreateWithPaymentMethod($data);
         } catch (PayFurlSDK\ResponseException $exception) {
             return [
@@ -147,6 +142,9 @@ class PayfurlAdapter
         $data['CustomerId'] = $customerPayfurlId;
         if ($data['payfurlSaveMyPayment']) {
             $response = $customerSdk->CreatePaymentMethodWithToken($data);
+            if (empty($response['paymentMethodId'])) {
+                throw new PayFurlSDK\ResponseException('The card could not be saved.', 0, 0, false);
+            }
             $data['PaymentMethodId'] = $response['paymentMethodId'];
             return $chargeSdk->CreateWithPaymentMethod($data);
         } else {
@@ -159,10 +157,6 @@ class PayfurlAdapter
     protected function chargeForNewPayFurlCustomer($data)
     {
         $chargeSdk = new PayFurlSDK\Charge();
-
-        if ($data['Phone'] && substr($data['Phone'], 0, 1) == '0') {
-            $data['Phone'] = '+61' . substr($data['Phone'], 1);
-        }
 
         if ($data['payfurlSaveMyPayment']) {
             $customerSdk = new PayFurlSDK\Customer();

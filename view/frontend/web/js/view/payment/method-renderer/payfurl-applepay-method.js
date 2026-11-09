@@ -23,7 +23,7 @@ define(
       getFormId: function () {
         return 'payfurl-applepay-form';
       },
-      initPaymentApplePayForm: function () {
+      initPaymentForm: function () {
         payfurl
           .addApplePay(
             this.getFormId(),

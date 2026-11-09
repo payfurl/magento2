@@ -1,0 +1,18 @@
+includes:
+    - vendor/bitexpert/phpstan-magento/extension.neon
+
+parameters:
+    level: 1
+    paths:
+        - .
+    excludePaths:
+      analyse:
+        - vendor/*
+        - e2e/*
+        - docker/*
+        - Test/*
+    # The SDK loads its tools/ classes with require_once, outside its PSR-4 autoload.
+    scanDirectories:
+        - vendor/payfurl/phpsdk/src/tools
+    bootstrapFiles:
+        - vendor/magento/framework/Phrase/__.php

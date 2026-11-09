@@ -9,15 +9,12 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 use Payfurl\Payment\Gateway\SubjectReader;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 
-/**
- * Class CustomerDataBuilder
- */
 class CustomerDataBuilder implements BuilderInterface
 {
     /**
      * Customer block name
      */
-    const CUSTOMER = 'CustomerCode';
+    public const CUSTOMER = 'CustomerCode';
 
     /**
      * @var SubjectReader
@@ -51,7 +48,7 @@ class CustomerDataBuilder implements BuilderInterface
 
         $returnData = [
             'loginCustomer' => $isLoginCustomer,
-            'Email' => $order->getCustomerEmail()
+            'Email' => $paymentDO->getPayment()->getOrder()->getCustomerEmail()
         ];
 
         if ($isLoginCustomer) {

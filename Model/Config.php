@@ -7,25 +7,27 @@ use Magento\Store\Model\ScopeInterface;
 
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
-    const ACTIVE = 'active';
-    const DEBUG = 'debug';
-    const ENV = 'env';
-    const ENABLE_GOOGLEPAY = 'enable_googlepay';
-    const ENABLE_APPLEPAY = 'enable_applepay';
+    public const ACTIVE = 'active';
+    public const DEBUG = 'debug';
+    public const ENV = 'env';
+    public const ENABLE_GOOGLEPAY = 'enable_googlepay';
+    public const ENABLE_APPLEPAY = 'enable_applepay';
 
-    const ENV_SANDBOX = 'sandbox';
+    public const ENV_SANDBOX = 'sandbox';
 
-    const ENV_LIVE = 'production';
-    const SANDBOX_PUBLIC_KEY = 'sandbox_public_key';
+    public const ENV_LIVE = 'production';
+    public const SANDBOX_PUBLIC_KEY = 'sandbox_public_key';
 
-    const SANDBOX_SECRET_KEY = 'sandbox_secret_key';
-    const LIVE_PUBLIC_KEY = 'public_key';
+    public const SANDBOX_SECRET_KEY = 'sandbox_secret_key';
+    public const LIVE_PUBLIC_KEY = 'public_key';
 
-    const LIVE_SECRET_KEY = 'secret_key';
+    public const LIVE_SECRET_KEY = 'secret_key';
 
-    const TITLE = 'title';
+    public const TITLE = 'title';
 
-    const CAN_GET_SAVED_PAYMENTS = 'can_get_saved_payments';
+    public const WEBHOOK_SIGNING_KEY = 'webhook_signing_key';
+
+    public const CAN_GET_SAVED_PAYMENTS = 'can_get_saved_payments';
 
     protected $scopeConfig;
     protected $storeId;
@@ -34,7 +36,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        string $methodCode = null,
+        ?string $methodCode = null,
         string $pathPattern = self::DEFAULT_PATH_PATTERN
     ) {
         parent::__construct($scopeConfig, $methodCode, $pathPattern);
@@ -63,29 +65,29 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         return (bool)(int)$this->getScopeConfigValue(self::ENABLE_APPLEPAY);
     }
 
-    public function getEnv(): string
+    public function getEnv($storeId = null): string
     {
-        return $this->getScopeConfigValue(self::ENV);
+        return (string)$this->getScopeConfigValue(self::ENV, $storeId);
     }
 
-    public function getSandboxPublicKey()
+    public function getSandboxPublicKey($storeId = null)
     {
-        return $this->_encryptor->decrypt($this->getScopeConfigValue(self::SANDBOX_PUBLIC_KEY));
+        return $this->_encryptor->decrypt((string)$this->getScopeConfigValue(self::SANDBOX_PUBLIC_KEY, $storeId));
     }
 
-    public function getLivePublicKey()
+    public function getLivePublicKey($storeId = null)
     {
-        return $this->_encryptor->decrypt($this->getScopeConfigValue(self::LIVE_PUBLIC_KEY));
+        return $this->_encryptor->decrypt((string)$this->getScopeConfigValue(self::LIVE_PUBLIC_KEY, $storeId));
     }
 
-    public function getSandboxSecretKey()
+    public function getSandboxSecretKey($storeId = null)
     {
-        return $this->_encryptor->decrypt($this->getScopeConfigValue(self::SANDBOX_SECRET_KEY));
+        return $this->_encryptor->decrypt((string)$this->getScopeConfigValue(self::SANDBOX_SECRET_KEY, $storeId));
     }
 
-    public function getLiveSecretKey()
+    public function getLiveSecretKey($storeId = null)
     {
-        return $this->_encryptor->decrypt($this->getScopeConfigValue(self::LIVE_SECRET_KEY));
+        return $this->_encryptor->decrypt((string)$this->getScopeConfigValue(self::LIVE_SECRET_KEY, $storeId));
     }
 
     public function getTitle(): string
@@ -93,20 +95,28 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         return $this->getScopeConfigValue(self::TITLE);
     }
 
-    public function getSecretKey()
+    public function getSecretKey($storeId = null)
     {
-        if ($this->getEnv() == self::ENV_LIVE) {
-            return $this->getLiveSecretKey();
+        if ($this->getEnv($storeId) == self::ENV_LIVE) {
+            return $this->getLiveSecretKey($storeId);
         }
-        return $this->getSandboxSecretKey();
+        return $this->getSandboxSecretKey($storeId);
     }
 
-    public function getPublicKey()
+    public function getPublicKey($storeId = null)
     {
-        if ($this->getEnv() == self::ENV_LIVE) {
-            return $this->getLivePublicKey();
+        if ($this->getEnv($storeId) == self::ENV_LIVE) {
+            return $this->getLivePublicKey($storeId);
         }
-        return $this->getSandboxPublicKey();
+        return $this->getSandboxPublicKey($storeId);
+    }
+
+    /**
+     * Signing key of the merchant's payFURL webhook subscription.
+     */
+    public function getWebhookSigningKey($storeId = null): string
+    {
+        return (string)$this->_encryptor->decrypt((string)$this->getScopeConfigValue(self::WEBHOOK_SIGNING_KEY, $storeId));
     }
 
     public function canGetSavedPayments(): bool
@@ -128,12 +138,17 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         ];
     }
 
-    protected function getScopeConfigValue($path)
+    /**
+     * @param string $path
+     * @param int|string|null $storeId the order's store for gateway calls; null is the current store
+     * @return mixed
+     */
+    protected function getScopeConfigValue($path, $storeId = null)
     {
         return $this->scopeConfig->getValue(
             'payment/payfurl/' . $path,
             ScopeInterface::SCOPE_STORE,
-            $this->storeId
+            $storeId ?? $this->storeId
         );
     }
 }

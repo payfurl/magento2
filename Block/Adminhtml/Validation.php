@@ -37,14 +37,19 @@ class Validation extends Field
             }
         }
 
-        $endpoint = $this->getUrl('payfurl/configuration/validate', ['storeId' => $storeId]);
+        $endpoint = $this->_escaper->escapeHtmlAttr(
+            $this->getUrl('payfurl/configuration/validate', ['storeId' => $storeId])
+        );
+        $title = $this->_escaper->escapeHtml($title);
 
+        // No inline handler (CSP): view/adminhtml/web/js/system.js binds the click.
         return <<<TEXT
             <button
                 type="button"
                 title="{$title}"
-                class="button"
-                onclick="payfurlValidator.call(this, '{$endpoint}', '{$envId}')">
+                class="button payfurl-validate-credentials"
+                data-endpoint="{$endpoint}"
+                data-env-id="{$envId}">
                 <span>{$title}</span>
             </button>
 TEXT;

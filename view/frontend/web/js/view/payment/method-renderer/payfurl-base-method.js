@@ -11,18 +11,120 @@ define(
   function (ko, $, Component, quote, payfurl, payfurlConfig, additionalValidators) {
     'use strict';
 
-    window._quote = quote;
-    window._component = Component;
-    window._additionalValidators = additionalValidators;
+    /*
+     * The browser SDK keeps a single onSuccess/onFailure/onValidate callback, so they are registered once here and
+     * routed to the renderer of the payment method the shopper selected. Registering them in every renderer meant the
+     * last renderer to load placed every order, under its own payment method code.
+     */
+    const renderers = {};
+    let wired = false;
+
+    function selectedRenderer() {
+      return renderers[quote.paymentMethod()?.method];
+    }
+
+    // 1.x's per-method form methods. 2.0 renderers define initPaymentForm instead.
+    const LEGACY_INIT_METHODS = ['initPaymentCardForm', 'initPaymentPaypalForm', 'initPaymentApplePayForm',
+      'initPaymentGooglePayForm', 'initPaymentPayToForm', 'initPaymentCheckoutForm'];
+
+    function mountWhenSelectedAlias() {
+      return this.mountWhenSelected();
+    }
+
+    function customerEmail() {
+      return window.checkoutConfig.customerData?.email || quote.guestEmail;
+    }
+
+    // Sent as entered: the shopper's country is not assumed.
+    function customerInfo(billingAddress) {
+      return {
+        firstName: billingAddress?.firstname,
+        lastName: billingAddress?.lastname,
+        email: customerEmail(),
+        phoneNumber: billingAddress?.telephone || '',
+      };
+    }
+
+    function setBillingAddress(billingAddress) {
+      payfurl
+        .setBillingAddress({
+          ...customerInfo(billingAddress),
+          streetAddress: billingAddress?.street?.[0],
+          city: billingAddress?.city,
+          country: billingAddress?.countryId,
+          region: billingAddress?.region,
+          postalCode: billingAddress?.postcode,
+          state: billingAddress?.regionCode,
+        })
+        .setCustomerInfo(customerInfo(billingAddress));
+    }
+
+    function setOrderInfo(quoteTotal, items) {
+      payfurl
+        .setAmount(quoteTotal?.grand_total)
+        .setOrderInfo({
+          orderItems: items?.map(p => ({
+            name: p.name,
+            quantity: Number(p.qty),
+            sku: p.sku,
+            unitPrice: Number(p.price),
+            totalAmount: Number(p.price) * Number(p.qty),
+          })),
+          taxAmount: Number(quoteTotal?.tax_amount),
+          shippingAmount: Number(quoteTotal?.shipping_amount),
+          discountAmount: Math.abs(Number(quoteTotal?.discount_amount)),
+        });
+    }
+
+    function wireOnce() {
+      if (wired) return;
+      wired = true;
+
+      quote.totals.subscribe(() => setOrderInfo(quote.getTotals()(), quote.getItems()));
+      quote.billingAddress.subscribe(() => setBillingAddress(quote.billingAddress()));
+      setBillingAddress(quote.billingAddress());
+      setOrderInfo(quote.getTotals()(), quote.getItems());
+
+      // quote.guestEmail is not observable.
+      if (!window.checkoutConfig.customerData?.email) {
+        let email = quote.guestEmail;
+        setInterval(() => {
+          if (email === quote.guestEmail) return;
+          email = quote.guestEmail;
+          payfurl.setCustomerInfo(customerInfo(quote.billingAddress()));
+        }, 500);
+      }
+
+      payfurl.onSuccess(function (response) {
+        const renderer = selectedRenderer();
+        if (!renderer) return;
+
+        payfurlConfig.setToken(response.token || '');
+        payfurlConfig.setChargeId(response.transactionId || '');
+        payfurlConfig.setPaymentMethodId('');
+        payfurlConfig.setSaveMyPaymentMethod(
+          Boolean(renderer.isCustomerLoggedIn) && $('#save_my_payment_method').is(':checked'),
+        );
+
+        renderer.isPlaceOrderActionAllowed(true);
+        renderer.placeOrder();
+      });
+      payfurl.onFailure(function () {
+        selectedRenderer()?.isPlaceOrderActionAllowed(false);
+      });
+      payfurl.onValidate(() => {
+        const form = document.getElementById(`${quote.paymentMethod()?.method}_form`);
+        return form?.checkValidity() && additionalValidators.validate();
+      });
+    }
 
     return Component.extend({
-      self: this,
       isAvailable: ko.observable(true),
       placeOrderButtonVisible: true,
       isCustomerLoggedIn: window.checkoutConfig.isCustomerLoggedIn,
       totals: quote.totals,
       checkCard: ko.observable('saved'),
-      customerEmail: window.checkoutConfig.customerData?.email || quote.guestEmail,
+      formMounted: false,
 
       defaults: {
         template: 'Payfurl_Payment/payment/payfurl-card-form',
@@ -41,118 +143,53 @@ define(
       },
       initialize: function () {
         this._super();
-
-        const self = this;
-
-        quote.totals.subscribe(function () {
-          self.setOrderInfo(quote.getTotals()(), quote.getItems());
-        });
-        quote.billingAddress.subscribe(function () {
-          self.setBillingAddress(quote.billingAddress());
-        });
-        this.subscribeForGuestEmail();
-
-        payfurl.onSuccess(function (response) {
-          const payfurlToken = response.token || '';
-          const payfurlChargeId = response.transactionId || '';
-
-          payfurlConfig.setToken(payfurlToken);
-          payfurlConfig.setChargeId(payfurlChargeId);
-          if (self.isCustomerLoggedIn) {
-            payfurlConfig.setSaveMyPaymentMethod($('#save_my_payment_method').is(':checked'));
-          }
-
-          self.isPlaceOrderActionAllowed(true);
-          self.placeOrder();
-        });
-        payfurl.onFailure(function (errorMessage) {
-          self.isPlaceOrderActionAllowed(false);
-        });
-        payfurl.onValidate(() => {
-          const paymentMethod = quote.getPaymentMethod()();
-          const form = document.getElementById(`${paymentMethod?.method}_form`);
-          return form?.checkValidity() && additionalValidators.validate();
-        });
-
-
-        this.setBillingAddress(quote.billingAddress());
-        this.setOrderInfo(quote.getTotals()(), quote.getItems());
+        renderers[this.getCode()] = this;
+        wireOnce();
 
         return this;
       },
-      setBillingAddress: function (billingAddress) {
-        let phone = billingAddress?.telephone?.replace(/^0/, '+61') || "";
-        if (phone && !phone.match(/^\+/)) {
-          phone = '+61' + phone;
+      // 1.x's property, read once when the checkout loads: a theme that overrides a payFURL file from 1.x reads it.
+      customerEmail: customerEmail(),
+      getCustomerEmail: function () {
+        return customerEmail();
+      },
+      /**
+       * The form's afterRender: the SDK form (and the card form's Click to Pay, which can send the shopper a passcode)
+       * is added when the shopper first selects this method, not when the checkout renders every method.
+       */
+      mountWhenSelected: function () {
+        const mount = () => {
+          if (this.formMounted) return;
+          this.formMounted = true;
+          this.initPaymentForm();
+        };
+        if (quote.paymentMethod()?.method === this.getCode()) {
+          mount();
+          return this;
         }
-        payfurl
-          .setBillingAddress({
-            firstName: billingAddress?.firstname,
-            lastName: billingAddress?.lastname,
-            email: this.customerEmail,
-            phoneNumber: phone,
-            streetAddress: billingAddress?.street?.[0],
-            city: billingAddress?.city,
-            country: billingAddress?.countryId,
-            region: billingAddress?.region,
-            postalCode: billingAddress?.postcode,
-            state: billingAddress?.regionCode,
-          })
-          .setCustomerInfo({
-            firstName: billingAddress?.firstname,
-            lastName: billingAddress?.lastname,
-            email: this.customerEmail,
-            phoneNumber: phone,
-          });
-
+        const selected = quote.paymentMethod.subscribe((method) => {
+          if (method?.method !== this.getCode()) return;
+          selected.dispose();
+          mount();
+        });
         return this;
       },
-      setOrderInfo: function (quoteTotal, items) {
-        payfurl
-          .setAmount(quoteTotal?.grand_total)
-          .setOrderInfo({
-            orderItems: items?.map(p => ({
-              name: p.name,
-              quantity: Number(p.qty),
-              sku: p.sku,
-              unitPrice: Number(p.price),
-              totalAmount: Number(p.price) * Number(p.qty),
-            })),
-            taxAmount: Number(quoteTotal?.tax_amount),
-            shippingAmount: Number(quoteTotal?.shipping_amount),
-            discountAmount: Math.abs(Number(quoteTotal?.discount_amount)),
-          })
-
-        return this;
+      /**
+       * Each renderer adds its SDK form here. A theme's renderer from 1.x has its 1.x method instead
+       * (initPaymentCardForm, ...), so that is called.
+       */
+      initPaymentForm: function () {
+        const legacy = LEGACY_INIT_METHODS.find((name) => this[name] !== mountWhenSelectedAlias);
+        return legacy ? this[legacy]() : this;
       },
-      setCustomerEmail: function(email) {
-        const billingAddress = quote.billingAddress();
-        let phone = billingAddress?.telephone?.replace(/^0/, '+61') || "";
-        if (phone && !phone.match(/^\+/)) {
-          phone = '+61' + phone;
-        }
-        payfurl
-          .setCustomerInfo({
-            firstName: billingAddress?.firstname,
-            lastName: billingAddress?.lastname,
-            email,
-            phoneNumber: phone,
-          });
-      },
-      subscribeForGuestEmail: function () {
-        if (window.checkoutConfig.customerData?.email) return;
-        let email = quote.guestEmail;
-        const subscribeForGuestEmailHandler = setInterval(() => {
-          // If customer is logged in, we don't need to subscribe for guest email
-          if (window.checkoutConfig.customerData?.email) {
-            clearInterval(subscribeForGuestEmailHandler);
-          }
-          // check if email is changed
-          if (email === quote.guestEmail) return;
-          email = quote.guestEmail;
-          this.setCustomerEmail(quote.guestEmail);
-        }, 500);
-      },
+      // 1.x templates call these (afterRender: initPaymentCardForm()), so a theme that overrides a payFURL template
+      // from 1.x keeps working.
+      initPaymentCardForm: mountWhenSelectedAlias,
+      initPaymentPaypalForm: mountWhenSelectedAlias,
+      initPaymentApplePayForm: mountWhenSelectedAlias,
+      initPaymentGooglePayForm: mountWhenSelectedAlias,
+      initPaymentPayToForm: mountWhenSelectedAlias,
+      initPaymentCheckoutForm: mountWhenSelectedAlias,
       getSavedPaymentMethods: function () {
         let savedPayments = payfurlConfig.getSavedPaymentMethods();
         if (!savedPayments || savedPayments.length === 0) {
@@ -162,8 +199,25 @@ define(
 
         return savedPayments;
       },
+      /**
+       * Place Order: pays with the selected saved card, or submits the card form. The SDK listens for that
+       * submit, tokenises the card in its iframe, and its onSuccess (wireOnce) places the order with the token.
+       */
+      placeOrderClick: function () {
+        if (this.checkCard() === 'saved' && this.getSavedPaymentMethods()) {
+          return this.placeOrderWithSavedCard();
+        }
+        if (!this.validate() || !additionalValidators.validate()) {
+          return this;
+        }
+        document.getElementById('payfurl_card_form')?.requestSubmit();
+
+        return this;
+      },
       placeOrderWithSavedCard: function () {
-        this.isPlaceOrderActionAllowed(false);
+        payfurlConfig.setToken('');
+        payfurlConfig.setChargeId('');
+        payfurlConfig.setSaveMyPaymentMethod(false);
         payfurlConfig.setPaymentMethodId($('#payfurl-checkout-saved-select').val());
         this.isPlaceOrderActionAllowed(true);
         this.placeOrder();
@@ -194,4 +248,3 @@ define(
     });
   },
 );
-

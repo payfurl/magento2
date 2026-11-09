@@ -71,4 +71,8 @@ require([
             $(self).text($t("Validate Credentials")).attr('disabled', false);
         });
     };
+
+    $(document).on('click', '.payfurl-validate-credentials', function () {
+        window.payfurlValidator.call(this, $(this).data('endpoint'), $(this).data('envId'));
+    });
 });

@@ -5,20 +5,20 @@
  */
 namespace Payfurl\Payment\Gateway\Http\Client;
 
-/**
- * Class TransactionCapture
- */
+use Magento\Framework\Exception\LocalizedException;
+use Payfurl\Payment\Model\Adapter\PayfurlAdapter;
+
 class TransactionRefund extends AbstractTransaction
 {
     /**
      * @inheritdoc
      */
-    protected function process(array $data)
+    protected function process(array $data, PayfurlAdapter $adapter)
     {
-        /*get checkout only*/
-        if ($data["ChargeId"]) {
-            $result = $this->adapterFactory->create()->refund($data);
+        if (empty($data["ChargeId"])) {
+            throw new LocalizedException(__('The payFURL charge to refund is unknown.'));
         }
-        return $result;
+
+        return $adapter->refund($data);
     }
 }

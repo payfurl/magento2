@@ -18,14 +18,14 @@ class OrderDataBuilder implements BuilderInterface
 {
     use Formatter;
 
-    const INDEX = "Order";
-    const ORDER_NUMBER = 'OrderNumber';
+    public const INDEX = "Order";
+    public const ORDER_NUMBER = 'OrderNumber';
 
-    const FREIGHT_AMOUNT = 'FreightAmount';
+    public const FREIGHT_AMOUNT = 'FreightAmount';
 
-    const DUTY_AMOUNT = "DutyAmount";
+    public const DUTY_AMOUNT = "DutyAmount";
 
-    const ITEMS = "Items";
+    public const ITEMS = "Items";
 
     /**
      * @var SubjectReader
@@ -54,28 +54,30 @@ class OrderDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject): array
     {
-        $paymentDO = $this->subjectReader->readPayment($buildSubject);
+        /** @var \Magento\Sales\Model\Order $order */
+        $order = $this->subjectReader->readPayment($buildSubject)->getPayment()->getOrder();
 
-        $order = $paymentDO->getOrder();
-
+        // The SDK reads OrderNumber, FreightAmount and DutyAmount from inside Order.
         return [
-            self::ORDER_NUMBER => $order->getOrderIncrementId(),
-            self::FREIGHT_AMOUNT => $order->getShippingAmount(),
-            self::DUTY_AMOUNT => 0,
             self::INDEX => [
-                self::ITEMS => $this->buildOrderItems($order)
-            ]
+                self::ORDER_NUMBER => $order->getIncrementId(),
+                self::FREIGHT_AMOUNT => $order->getShippingAmount(),
+                self::DUTY_AMOUNT => 0,
+                self::ITEMS => $this->buildOrderItems($order),
+            ],
         ];
     }
 
     /**
-     * @param $order
+     * Visible items only: a configurable product's child item would otherwise be counted again.
+     *
+     * @param \Magento\Sales\Model\Order $order
      * @return array
      */
     public function buildOrderItems($order): array
     {
         $results = [];
-        foreach ($order->getItems() as $item) {
+        foreach ($order->getAllVisibleItems() as $item) {
             $totalTaxAmount = $item->getTaxAmount();
             $totalDiscountAmount = $item->getDiscountAmount();
             $itemPrice = $item->getPrice();
@@ -128,18 +130,6 @@ class OrderDataBuilder implements BuilderInterface
     }
 
     /**
-     * Payfurl only allows 12 character for ProductCode, 26 characters for description
-     *
-     * @param $string
-     * @param $length
-     * @return false|string
-     */
-    public function generateValidDataForOrderItem($string, $length)
-    {
-        return substr($string, 0, $length);
-    }
-
-    /**
      * @param $item
      * @param $qty
      * @param $amount
@@ -148,9 +138,9 @@ class OrderDataBuilder implements BuilderInterface
     private function generatePayfurlItemData($item, $qty, $amount): array
     {
         return [
-            'ProductCode' => $this->generateValidDataForOrderItem($item->getSku(), 12),
+            'ProductCode' => $item->getSku(),
             'CommodityCode' => null,
-            'Description' => $this->generateValidDataForOrderItem($item->getName(), 12),
+            'Description' => $item->getName(),
             'Quantity' => $qty,
             'UnitOfMeasure' => null,
             'Amount' => $amount

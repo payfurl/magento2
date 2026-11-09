@@ -23,7 +23,7 @@ define(
       getFormId: function () {
         return 'payfurl-paypal-form';
       },
-      initPaymentPaypalForm: function () {
+      initPaymentForm: function () {
         payfurl
           .addPaypal(
             this.getFormId(),

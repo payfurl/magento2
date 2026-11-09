@@ -10,7 +10,6 @@ define(
   function (ko, $, PayfurlBaseMethod, quote, payfurl, payfurlConfig) {
     'use strict';
 
-    window._quote = quote;
     return PayfurlBaseMethod.extend({
       self: this,
       defaults: {
@@ -33,7 +32,7 @@ define(
       getFormId: function() {
         return `payfurl-checkout-form-${this.getProviderType()}`;
       },
-      initPaymentCheckoutForm: function () {
+      initPaymentForm: function () {
         payfurl
           .addCheckout(
             this.getFormId(),

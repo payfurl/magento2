@@ -15,38 +15,38 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  */
 class AdditionalDataHandler implements HandlerInterface
 {
-    const PAYFURL_TYPE = "payfurlType";
-    const CARD_TYPE = "CARD";
+    public const PAYFURL_TYPE = "payfurlType";
+    public const CARD_TYPE = "CARD";
 
-    const CUSTOMER_EMAIL = "customerEmail";
+    public const CUSTOMER_EMAIL = "customerEmail";
 
-    const CARD_NUMBER = 'cardNumber';
+    public const CARD_NUMBER = 'cardNumber';
 
-    const CARD_HOLDER = 'cardHolder';
+    public const CARD_HOLDER = 'cardHolder';
 
-    const EXPIRY_DATE = 'expiryDate';
+    public const EXPIRY_DATE = 'expiryDate';
 
-    const CC_TYPE = "type";
-    const STATUS = "status";
-    const DATE_ADDED = "dateAdded";
-    const CURRENCY = "currency";
-    const PROVIDER_NAME = "providerName";
+    public const CC_TYPE = "type";
+    public const STATUS = "status";
+    public const DATE_ADDED = "dateAdded";
+    public const CURRENCY = "currency";
+    public const PROVIDER_NAME = "providerName";
 
-    const TRANSACTION = "transaction";
+    public const TRANSACTION = "transaction";
 
-    const REFUND_TRANSACTION = "refund";
+    public const REFUND_TRANSACTION = "refund";
 
-    const CHARGE_ID = "chargeId";
-    const PROVIDER_CHARGE_ID = "providerChargeId";
-    const AMOUNT = "amount";
-    const PROVIDER_ID = "providerId";
-    const REFERENCE = "reference";
-    const SUCCESS_DATE = "successDate";
-    const VOID_DATE = "voidDate";
+    public const CHARGE_ID = "chargeId";
+    public const PROVIDER_CHARGE_ID = "providerChargeId";
+    public const AMOUNT = "amount";
+    public const PROVIDER_ID = "providerId";
+    public const REFERENCE = "reference";
+    public const SUCCESS_DATE = "successDate";
+    public const VOID_DATE = "voidDate";
 
-    const REFUND_AMOUNT = "refundAmount";
-    const REFUND_DATE = "refundDateAdded";
-    const REFUND_COMMENT = "refundComment";
+    public const REFUND_AMOUNT = "refundAmount";
+    public const REFUND_DATE = "refundDateAdded";
+    public const REFUND_COMMENT = "refundComment";
 
     /**
      * @var SubjectReader
@@ -86,7 +86,6 @@ class AdditionalDataHandler implements HandlerInterface
             \Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS,
             $additionalData
         );
-        $payment->setMethod($this->getPaymentMethod($additionalData[self::PAYFURL_TYPE]));
     }
 
     /**
@@ -113,9 +112,9 @@ class AdditionalDataHandler implements HandlerInterface
 
             $this->getPaypalInformation($additionalData, $paymentInformation);
 
-            $additionalData[self::STATUS] = $transaction['status'];
-            $additionalData[self::DATE_ADDED] = $transaction['dateAdded'];
-            $additionalData[self::CURRENCY] = strtoupper($transaction['currency']);
+            $additionalData[self::STATUS] = $transaction['status'] ?? null;
+            $additionalData[self::DATE_ADDED] = $transaction['dateAdded'] ?? null;
+            $additionalData[self::CURRENCY] = strtoupper((string)($transaction['currency'] ?? ''));
 
             if (!empty($transaction["provider"]) && !empty($transaction["provider"]["name"])) {
                 $additionalData[self::PROVIDER_NAME] = $transaction['provider']["name"];
@@ -137,10 +136,10 @@ class AdditionalDataHandler implements HandlerInterface
     {
         if (!empty($paymentInformation["card"])) {
             $cardDetail = $paymentInformation["card"];
-            $additionalData[self::CARD_NUMBER] = $cardDetail["cardNumber"];
-            $additionalData[self::CARD_HOLDER] = $cardDetail["cardholder"];
-            $additionalData[self::EXPIRY_DATE] = $cardDetail["expiryDate"];
-            $additionalData[self::CC_TYPE] = $cardDetail["type"];
+            $additionalData[self::CARD_NUMBER] = $cardDetail["cardNumber"] ?? null;
+            $additionalData[self::CARD_HOLDER] = $cardDetail["cardholder"] ?? null;
+            $additionalData[self::EXPIRY_DATE] = $cardDetail["expiryDate"] ?? null;
+            $additionalData[self::CC_TYPE] = $cardDetail["type"] ?? null;
         }
     }
 
@@ -152,7 +151,7 @@ class AdditionalDataHandler implements HandlerInterface
     private function getPaypalInformation(&$additionalData, $paymentInformation)
     {
         if ($paymentInformation["type"] != self::CARD_TYPE) {
-            $additionalData[self::CUSTOMER_EMAIL] = $paymentInformation["email"];
+            $additionalData[self::CUSTOMER_EMAIL] = $paymentInformation["email"] ?? null;
         }
     }
 
@@ -165,50 +164,20 @@ class AdditionalDataHandler implements HandlerInterface
     private function getTransactionRawDetailData(&$additionalData, $transaction, $type)
     {
         if (!empty($type)) {
-            $additionalData[self::CHARGE_ID] = $transaction['chargeId'];
-            $additionalData[self::PROVIDER_CHARGE_ID] = $transaction['providerChargeId'];
-            $additionalData[self::AMOUNT] = $transaction['amount'];
-            $additionalData[self::PROVIDER_ID] = $transaction['providerId'];
-            $additionalData[self::REFERENCE] = $transaction['reference'];
-            $additionalData[self::SUCCESS_DATE] = $transaction['successDate'];
-            $additionalData[self::VOID_DATE] = $transaction['voidDate'];
+            $additionalData[self::CHARGE_ID] = $transaction['chargeId'] ?? null;
+            $additionalData[self::PROVIDER_CHARGE_ID] = $transaction['providerChargeId'] ?? null;
+            $additionalData[self::AMOUNT] = $transaction['amount'] ?? null;
+            $additionalData[self::PROVIDER_ID] = $transaction['providerId'] ?? null;
+            $additionalData[self::REFERENCE] = $transaction['reference'] ?? null;
+            $additionalData[self::SUCCESS_DATE] = $transaction['successDate'] ?? null;
+            $additionalData[self::VOID_DATE] = $transaction['voidDate'] ?? null;
 
             if ($type == self::REFUND_TRANSACTION && !empty($transaction["refunds"])) {
                 $lastRefundTransaction = end($transaction["refunds"]);
-                $additionalData[self::REFUND_AMOUNT] = $lastRefundTransaction["amount"];
-                $additionalData[self::REFUND_DATE] = $lastRefundTransaction["dateAdded"];
-                $additionalData[self::REFUND_COMMENT] = $lastRefundTransaction["comment"];
+                $additionalData[self::REFUND_AMOUNT] = $lastRefundTransaction["amount"] ?? null;
+                $additionalData[self::REFUND_DATE] = $lastRefundTransaction["dateAdded"] ?? null;
+                $additionalData[self::REFUND_COMMENT] = $lastRefundTransaction["comment"] ?? null;
             }
-        }
-    }
-
-    private function getPaymentMethod($type)
-    {
-        switch ($type) {
-            case "PAYPAL":
-                return "payfurl_paypal";
-            case "PAYTO":
-                return "payfurl_payto";
-            case "PAYID":
-                return "payfurl_checkout_azupay";
-            case "OPTTY":
-                return "payfurl_checkout_optty";
-            case "GOOGLEPAY":
-                return "payfurl_googlepay";
-            case "APPLEPAY":
-                return "payfurl_applepay";
-            case "SHIFT":
-                return "payfurl_checkout_shift";
-            case "PESAPAL":
-                return "payfurl_checkout_pesapal";
-            case "PAYBYACCOUNT":
-                return "payfurl_checkout_pay_by_account";
-            case "UPI":
-                return "payfurl_checkout_upi";
-            case "PAYGLOCAL":
-                return "payfurl_checkout_payglocal";
-            default:
-                return "payfurl_card";
         }
     }
 }
