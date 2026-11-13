@@ -8,6 +8,13 @@ release notes.
 
 ## [Unreleased]
 
+## [2.1.3] - 2026-11-13
+
+### Changed
+
+- Browser SDK updated from v4.11.1 to v4.11.2
+  ([SDK changelog](https://docs.payfurl.com/client_sdk/changelog)).
+
 ## [2.1.2] - 2026-11-12
 
 ### Changed
@@ -94,7 +101,8 @@ release notes.
 Versions 1.0.5 to 1.4.3 (July 2023 to February 2025) are listed with their tags on
 [GitHub](https://github.com/payfurl/magento2/tags).
 
-[Unreleased]: https://github.com/payfurl/magento2/compare/v2.1.2...HEAD
+[Unreleased]: https://github.com/payfurl/magento2/compare/v2.1.3...HEAD
+[2.1.3]: https://github.com/payfurl/magento2/compare/v2.1.2...v2.1.3
 [2.1.2]: https://github.com/payfurl/magento2/compare/v2.1.1...v2.1.2
 [2.1.1]: https://github.com/payfurl/magento2/compare/v2.1.0...v2.1.1
 [2.0.0]: https://github.com/payfurl/magento2/compare/v1.5.0...v2.0.0

@@ -33,7 +33,7 @@ class PayfurlAdapter
      * The browser SDK the checkout loads (view/frontend/requirejs-config.js; .github/workflows/sdk-bump.yml updates
      * both). /info/providers lists PayPal only for version 4 or later.
      */
-    public const BROWSER_SDK_VERSION = '4.11.1';
+    public const BROWSER_SDK_VERSION = '4.11.2';
 
     /**
      * @var Config
