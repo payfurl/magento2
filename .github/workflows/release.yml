@@ -1,14 +1,20 @@
-# Pushing a vX.Y.Z tag releases that version: the tag must match composer.json's version (Packagist skips a tag
-# that doesn't), and the GitHub release gets the version's CHANGELOG.md section as notes. Packagist picks up the tag
-# itself, through its GitHub hook on this repo.
+# Releases the module's version once: on every push to main (a merged pull request that bumps the version, such as
+# sdk-bump.yml's, releases itself) and on a pushed vX.Y.Z tag. A version that already has a GitHub release is
+# skipped. The tag must match composer.json's version (Packagist skips a tag that doesn't). The workflow creates the
+# GitHub release (and its vX.Y.Z tag, on the pushed commit) with the version's CHANGELOG.md section as notes;
+# Packagist picks up the tag itself, through its GitHub hook on this repo. A failed run is retried by re-running it.
 name: Release
 
 on:
   push:
+    branches: [main]
     tags: ['v*.*.*']
 
 permissions:
   contents: write
+
+concurrency:
+  group: release
 
 jobs:
   release:
@@ -16,17 +22,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: The tag matches composer.json
+      - name: The version, unless it is released
         id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           version=$(jq -r .version composer.json)
-          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+          if [ "$GITHUB_REF_TYPE" = tag ] && [ "v$version" != "$GITHUB_REF_NAME" ]; then
             echo "::error::tag $GITHUB_REF_NAME, but composer.json's version is $version"
             exit 1
+          fi
+          if gh release view "v$version" >/dev/null 2>&1; then
+            echo "v$version is released"
+            exit 0
           fi
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
       - name: Release notes from CHANGELOG.md
+        if: steps.version.outputs.version
         env:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
@@ -39,6 +52,8 @@ jobs:
           fi
 
       - name: GitHub release
+        if: steps.version.outputs.version
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" --verify-tag --title "$GITHUB_REF_NAME" --notes-file notes.md
+          VERSION: ${{ steps.version.outputs.version }}
+        run: gh release create "v$VERSION" --target "$GITHUB_SHA" --title "v$VERSION" --notes-file notes.md

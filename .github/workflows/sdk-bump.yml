@@ -10,11 +10,14 @@
 # this release has then been tested with. A new major is not compatible: its PR is a draft that only changes the
 # constraint, to start the migration from.
 #
-# Each PR's body asks for the e2e run in payfurl/platform before merging. Two PRs open the same day bump to the same
-# patch version: merge one, and the other's conflict shows which to rebase.
+# A version is skipped once a PR for its branch exists (open, merged or closed). A run that pushed the branch but
+# failed to open the PR is retried the next night: the branch is force-pushed again from main.
 #
-# A PR opened with the default GITHUB_TOKEN does not start other workflows, so CI would not run on it: set the
-# SDK_BUMP_TOKEN secret (a fine-grained token with contents and pull-requests write on this repository) for that.
+# A minor or patch PR merges itself once CI passes (gh pr merge --auto), and release.yml then releases the new version
+# from main. That needs a ruleset requiring status checks on main (without one the PR is left to a person) and the
+# SDK_BUMP_TOKEN secret, a fine-grained token with contents and pull-requests write on this repository: GitHub runs
+# no CI on a PR opened with the default token, and starts no release.yml for a merge made with it. The e2e suite in
+# payfurl/platform is not part of CI: its store loads the browser SDK built from source, not the pinned release.
 name: SDK bump
 
 on:
@@ -47,7 +50,8 @@ jobs:
           pinned=$(sed -nE 's#.*assets\.payfurl\.com/v([0-9.]+)/js/payfurl\.js.*#\1#p' view/frontend/requirejs-config.js)
           echo "pinned v$pinned, npm v$latest"
           branch="sdk-bump/v$latest"
-          if [ "$latest" = "$pinned" ] || git ls-remote --exit-code --heads origin "$branch" >/dev/null; then
+          prs=$(gh pr list --head "$branch" --state all --json number --jq length)
+          if [ "$latest" = "$pinned" ] || [ "$prs" != 0 ]; then
             echo "nothing to do"
             exit 0
           fi
@@ -79,11 +83,25 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git switch -c "$BRANCH"
           git commit -am "Browser SDK v$LATEST (module $next)"
-          git push origin "$BRANCH"
+          git push --force origin "$BRANCH"
           gh pr create --base main --head "$BRANCH" --title "Browser SDK v$LATEST (module $next)" --body \
             "Pins the browser SDK released to production as @payfurl/client v$LATEST ([changelog](https://docs.payfurl.com/client_sdk/changelog)) and bumps the module to $next.
 
-          Before merging, run the e2e suite against this branch from a payfurl/platform checkout: \`MAGENTO_PLUGIN_DIR=<this checkout> just e2e magento\`. After merging, tag \`v$next\` to release it."
+          It merges itself once CI passes, and the merge releases v$next (release.yml)."
+
+      - name: Merge it once CI passes
+        if: steps.sdk.outputs.latest
+        env:
+          GH_TOKEN: ${{ secrets.SDK_BUMP_TOKEN || github.token }}
+          BRANCH: ${{ steps.sdk.outputs.branch }}
+        run: |
+          # Without required checks, --auto would merge at once: leave the PR to a person.
+          checks=$(gh api "repos/$GITHUB_REPOSITORY/rules/branches/main" --jq '[.[] | select(.type == "required_status_checks")] | length')
+          if [ "$checks" = 0 ]; then
+            echo "::warning::main requires no checks: merge the PR by hand"
+            exit 0
+          fi
+          gh pr merge "$BRANCH" --auto --merge
 
   php-sdk:
     runs-on: ubuntu-latest
@@ -94,6 +112,8 @@ jobs:
 
       - name: Compare the required SDK with Packagist
         id: sdk
+        env:
+          GH_TOKEN: ${{ secrets.SDK_BUMP_TOKEN || github.token }}
         run: |
           latest=$(curl -fsS https://repo.packagist.org/p2/payfurl/phpsdk.json \
             | jq -r '.packages["payfurl/phpsdk"][].version' | sed 's/^v//' \
@@ -111,8 +131,9 @@ jobs:
           required="$major${BASH_REMATCH[2]:-.0}${BASH_REMATCH[3]:-.0}"
           echo "required $required ($constraint), Packagist $latest"
           branch="phpsdk-bump/v$latest"
+          prs=$(gh pr list --head "$branch" --state all --json number --jq length)
           if [ "$(printf '%s\n' "$required" "$latest" | sort -V | tail -1)" = "$required" ] \
-            || git ls-remote --exit-code --heads origin "$branch" >/dev/null; then
+            || [ "$prs" != 0 ]; then
             echo "nothing to do"
             exit 0
           fi
@@ -136,7 +157,7 @@ jobs:
 
           if [ "$MAJOR" = true ]; then
             git commit -am "payfurl/phpsdk v$LATEST: a new major, to migrate to"
-            git push origin "$BRANCH"
+            git push --force origin "$BRANCH"
             gh pr create --draft --base main --head "$BRANCH" --title "payfurl/phpsdk v$LATEST (new major: needs a migration)" --body \
               "payfurl/phpsdk v$LATEST is a new major version ([changelog]($sdk_changelog), and the SDK's UPGRADE.md). This draft only changes the constraint from ^$REQUIRED to ^$LATEST: the module's SDK calls (Model/Adapter/PayfurlAdapter.php) need migrating by hand, with the module's own major or minor version and changelog entry.
 
@@ -153,8 +174,22 @@ jobs:
           mv CHANGELOG.tmp CHANGELOG.md
 
           git commit -am "payfurl/phpsdk v$LATEST (module $next)"
-          git push origin "$BRANCH"
+          git push --force origin "$BRANCH"
           gh pr create --base main --head "$BRANCH" --title "payfurl/phpsdk v$LATEST (module $next)" --body \
             "Requires payfurl/phpsdk $LATEST ([changelog]($sdk_changelog)), the release now on Packagist, and bumps the module to $next. Stores already get it through the module's caret constraint: this sets the minimum to the version it was tested with.
 
-          Before merging, run the e2e suite against this branch from a payfurl/platform checkout: \`MAGENTO_PLUGIN_DIR=<this checkout> just e2e magento\`. After merging, tag \`v$next\` to release it."
+          It merges itself once CI passes, and the merge releases v$next (release.yml). To check it first, turn off auto-merge on this PR and run the e2e suite against this branch from a payfurl/platform checkout: \`MAGENTO_PLUGIN_DIR=<this checkout> just e2e magento\`."
+
+      - name: Merge it once CI passes
+        if: steps.sdk.outputs.latest && steps.sdk.outputs.major == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.SDK_BUMP_TOKEN || github.token }}
+          BRANCH: ${{ steps.sdk.outputs.branch }}
+        run: |
+          # Without required checks, --auto would merge at once: leave the PR to a person.
+          checks=$(gh api "repos/$GITHUB_REPOSITORY/rules/branches/main" --jq '[.[] | select(.type == "required_status_checks")] | length')
+          if [ "$checks" = 0 ]; then
+            echo "::warning::main requires no checks: merge the PR by hand"
+            exit 0
+          fi
+          gh pr merge "$BRANCH" --auto --merge
